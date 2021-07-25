@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" 
+  xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" 
+  xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+
+	<url>
+	  <loc>http://carmix-duisburg.de/</loc>
+	    <image:image>
+        <image:loc>http://carmix-duisburg.de/img/logo/schriftlogo.png</image:loc>
+        <image:caption>Carmix Schriftzug</image:caption>
+		</image:image>
+		<image:image>
+        <image:loc>http://carmix-duisburg.de/img/logo/newlogo.png</image:loc>
+        <image:caption>Carmix Logo</image:caption>
+		</image:image>
+	  <changefreq>monthly</changefreq>
+	  <priority>1.00</priority>
+	</url>
+	<url>
+	  <loc>http://carmix-duisburg.de/#kfz-reparatur</loc>
+
+	  <changefreq>monthly</changefreq>
+	  <priority>0.80</priority>
+	</url>
+	<url>
+	  <loc>http://carmix-duisburg.de/#fahrzeugreinigung</loc>
+	  <changefreq>monthly</changefreq>
+	  <priority>0.80</priority>
+	</url>
+	<url>
+	  <loc>http://carmix-duisburg.de/#reifenservice</loc>
+	  <changefreq>monthly</changefreq>
+	  <priority>0.80</priority>
+	</url>	
+	<url>
+	  <loc>http://carmix-duisburg.de/#fahrzeugreinigung</loc>
+	  <changefreq>monthly</changefreq>
+	  <priority>0.80</priority>
+	</url>
+	<url>
+	  <loc>http://carmix-duisburg.de/#autoglas</loc>
+	  	<image:image>
+        <image:loc>http://carmix-duisburg.de/img/content/glasswechsel-min.jpg</image:loc>
+        <image:caption>Carmix Autoglas Glasswechsel</image:caption>
+		</image:image>
+		<image:image>
+        <image:loc>http://carmix-duisburg.de/img/content/glasstoenung-min.jpg</image:loc>
+        <image:caption>Carmix Autoglas Scheibentönung</image:caption>
+		</image:image>
+	  <changefreq>monthly</changefreq>
+	  <priority>0.80</priority>
+	</url>
+	<url>
+	  <loc>http://carmix-duisburg.de/#galerie</loc>
+	  <changefreq>monthly</changefreq>
+	  <priority>0.80</priority>
+	</url>
+	<url>
+	  <loc>http://carmix-duisburg.de/#impressum</loc>
+	  <changefreq>monthly</changefreq>
+	  <priority>0.80</priority>
+	</url>
+</urlset>
