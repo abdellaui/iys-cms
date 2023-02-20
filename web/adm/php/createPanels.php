@@ -40,7 +40,7 @@ if ( 'createPanels.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 			<p>Parameter werden folgend initiallisiert: <b>{{<u>name</u>}}</b></p>
 		  </div>
 		</div>
-		  <div class="col-md-8 col-sm-12">
+		  <div class="col-lg-8 col-md-12">
 			<div class="box box-warning">
 			  <div class="box-header with-border">
 				<h3 class="box-title">HTML-Editor</h3>
@@ -51,7 +51,7 @@ if ( 'createPanels.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 			  </div>
 			</div>
 		  </div>
-		  <div class="col-md-4 col-sm-12">
+		  <div class="col-lg-4 col-md-12">
 		  <?php
 		  $mvc = new MVCManager();
 		  echo $mvc->getList();

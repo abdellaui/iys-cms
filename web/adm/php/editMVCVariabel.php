@@ -23,7 +23,7 @@ if ( 'editMVCVariabel.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 			<p>MVC Parameter werden folgend initiallisiert: <b>{{$_GET::<u>name</u>}}</b></p>
 		  </div>
 		</div>
-		  <div class="col-md-8 col-sm-12">
+		  <div class="col-lg-8 col-md-12">
 		 <div class="box box-success">
 		  <div class="box-header with-border">
 			<h3 class="box-title">MVC Parameter</h3>
@@ -43,7 +43,7 @@ if ( 'editMVCVariabel.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 		  </div>
 		  </div>
 		  </div>
-		  <div class="col-md-4 col-sm-12">
+		  <div class="col-lg-4 col-md-12">
 		  <div class="box box-info">
 		  <div class="box-header with-border">
 			<h3 class="box-title">MVC Parameter hinzufügen</h3>

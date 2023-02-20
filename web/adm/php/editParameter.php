@@ -27,7 +27,7 @@ if(isset($_GET['id'])){
 <section class="content">
 		  <div class="row">
 	
-		  <div class="col-md-8 col-sm-12" id="alleParameterBearbeitungsModus">
+		  <div class="col-lg-8 col-md-12" id="alleParameterBearbeitungsModus">
 		  		<?php 
 				if(count($parameterDetails['parameters'])>0){
 				foreach($parameterDetails['parameters'] as $k => $a){
@@ -73,7 +73,7 @@ if(isset($_GET['id'])){
 				?>
 			
 		  </div>
-		  <div class="col-sm-12 col-md-4">
+		  <div class="col-lg-4 col-md-12">
 		  <div class="box box-success">
 		  <div class="box-header with-border">
 			<h3 class="box-title">Übersicht der Parameter</h3>
