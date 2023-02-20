@@ -2,11 +2,11 @@
 <browserconfig>
 	<msapplication>
 		<tile>
-			<square70x70logo src="http://carmix-duisburg.de/img/icons/ms/mstile-70x70.png"/>
-			<square150x150logo src="http://carmix-duisburg.de/img/icons/ms/mstile-150x150.png"/>
-			<square310x310logo src="http://carmix-duisburg.de/img/icons/ms/mstile-310x310.png"/>
-			<wide310x150logo src="http://carmix-duisburg.de/img/icons/ms/mstile-310x150.png"/>
-			<TileColor>#D8D8D8</TileColor>
+			<square70x70logo src="https://sahin.cloud/img/icons/ms/mstile-70x70.png"/>
+			<square150x150logo src="https://sahin.cloud/img/icons/ms/mstile-150x150.png"/>
+			<square310x310logo src="https://sahin.cloud/img/icons/ms/mstile-310x310.png"/>
+			<wide310x150logo src="https://sahin.cloud/img/icons/ms/mstile-310x150.png"/>
+			<TileColor>#000000</TileColor>
 		</tile>
 	</msapplication>
 </browserconfig>

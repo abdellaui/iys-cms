@@ -1,6 +1,6 @@
 <?php
-error_reporting(0);
 session_start();
+error_reporting(E_ERROR);
 if ( 'autoload.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 {
 	die('(c) '.date("Y").' by Abdullah Sahin. All rights reserved.');
@@ -24,6 +24,8 @@ require("Classes/ParameterTypeArray.class.php");
 require("Classes/ParameterInhaltManager.class.php");
 require("Classes/Paneltem.class.php");
 require("Classes/GenerateForm.class.php");
+
+require("Classes/MVCManager.class.php");
 
 require("Classes/UserDetail.class.php");
 ?>

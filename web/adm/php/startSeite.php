@@ -15,32 +15,6 @@ if ( 'editPage.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 </section>
 <section class="content">
 <div class="row">
-        <div class="col-lg-6 col-xs-6">
-          <div class="small-box bg-yellow">
-            <div class="inner">
-              <h3>{{google.analytics.api.online}}</h3>
-
-              <p>Online Besucher</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-person"></i>
-            </div>
-            <a href="#" class="small-box-footer"></a>
-          </div>
-        </div>
-        <div class="col-lg-6 col-xs-6">
-          <div class="small-box bg-red">
-            <div class="inner">
-              <h3>{{google.analytics.api.total}}</h3>
-
-              <p>Besucher gesamt</p>
-            </div>
-            <div class="icon">
-              <i class="ion ion-pie-graph"></i>
-            </div>
-            <a href="#" class="small-box-footer"></a>
-          </div>
-        </div>
 		 <div class="col-lg-12 col-xs-12">
 		<div class="box box-info">
 			  <div class="box-body">

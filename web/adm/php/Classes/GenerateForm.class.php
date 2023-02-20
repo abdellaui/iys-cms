@@ -1,28 +1,40 @@
 <?php
 class GenerateForm{
-	public $id, $name, $type, $fremdid ,$sorte, $Connection;
+	public $id, $name, $type, $fremdid ,$sorte,$parentid, $datebase, $Connection;
 	
-	public function __construct($id=0, $name=0, $type=0, $fremdid=0,$sorte=0){
+	public function __construct($id=0, $name=0, $type=0, $fremdid=0, $sorte=0, $parentid = 0, $datebase=0){
 		$this->id = $id;
 		$this->name = $name;
 		$this->type = $type;
 		$this->fremdid = $fremdid;
 		$this->sorte = $sorte;
+		if($parentid==0){
+			$this->parentid = $id;
+		}else{
+			$this->parentid = $parentid;
+		}
+		$this->datebase = $datebase;
 		$this->Connection = new Connection();
 	}
 	public function __toString(){
 		return $this->erstellForm();
 	}
-	
+	public function getErstellForm(){
+		return $this->erstellForm();
+	}
 	private function hatEinWert($id, $fremdid, $parentid){
-		$qry1 = $this->Connection->query("SELECT COUNT(id) AS anzahl, type, wert, id FROM parameterinhalt WHERE paraid = :paraID AND fremdid = :fremdID AND parentid = :parentID;", array("paraID"=>$id, "fremdID"=>$fremdid, "parentID"=>$parentid));
+		if($this->datebase==0){
+			$qry1 = $this->Connection->query("SELECT COUNT(id) AS anzahl, type, wert, id FROM parameterinhalt WHERE paraid = :paraID AND fremdid = :fremdID AND parentid = :parentID;", array("paraID"=>$id, "fremdID"=>$fremdid, "parentID"=>$parentid));
+		}else{
+			$qry1 = $this->Connection->query("SELECT COUNT(i.id) AS anzahl, p.type AS type, i.wert AS wert, i.id AS id FROM mvc_parameterinhalt AS i, mvc_parameter AS p WHERE i.parentid = p.id AND i.pageid = :fremdID AND i.parentid = :parentID;", array("fremdID"=>$parentid, "parentID"=>$id));
+		}
 		if($qry1[0]['anzahl']>0){
 			if($qry1[0]['wert']!=''){
-			if($qry1[0]['type']==1||$qry1[0]['type']==2||$qry1[0]['type']==3){
-				return htmlspecialchars($qry1[0]['wert']);
-			}else{
-				return $qry1[0]['wert'];
-			}
+				if($qry1[0]['type']==1||$qry1[0]['type']==2||$qry1[0]['type']==3){
+					return htmlspecialchars($qry1[0]['wert']);
+				}else{
+					return $qry1[0]['wert'];
+				}
 			}else{
 				return ' ';
 			}
@@ -86,38 +98,38 @@ class GenerateForm{
 	private function erstellForm(){
 	$typFirst = substr($this->type, 0, 1);
 	$return = '';
-	$genSufix = $this->id.'_'.$this->fremdid.'_'.$this->type.'_'.$this->id;
+	$genSufix = $this->id.'_'.$this->fremdid.'_'.$this->type.'_'.$this->parentid;
 	if($typFirst==1){
-		if($this->hatEinWert($this->id, $this->fremdid, $this->id)){
-		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><i class="fa fa-file-text-o"></i></span><input type="text" class="form-control" placeholder="Ein Wert für '.$this->name.'" aria-describedby="sizing-addon1" id="input'.$genSufix.'" value="'.$this->hatEinWert($this->id, $this->fremdid, $this->id).'"></div>';
-		$return .= '<div class="hidden" paraarbeit="update" parasuche="var" paranick="input" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div>';
+		if($this->hatEinWert($this->id, $this->fremdid, $this->parentid)){
+		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><i class="fa fa-file-text-o"></i></span><input type="text" class="form-control" placeholder="Ein Wert für '.$this->name.'" aria-describedby="sizing-addon1" id="input'.$genSufix.'" value="'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'"></div>';
+		$return .= '<div class="hidden" paraarbeit="update" parasuche="var" paranick="input" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}else{
 		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><i class="fa fa-file-text-o"></i></span><input type="text" class="form-control" placeholder="Ein Wert für '.$this->name.'" aria-describedby="sizing-addon1" id="input'.$genSufix.'"></div>';
-		$return .= '<div class="hidden" paraarbeit="new" parasuche="var" paranick="input" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div>';
+		$return .= '<div class="hidden" paraarbeit="new" parasuche="var" paranick="input" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}
 	}elseif($typFirst==2){
-		if($this->hatEinWert($this->id, $this->fremdid, $this->id)){
-		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><a href="#" title="Bildvorschau" id="vorschauimage'.$genSufix.'" data-toggle="popover" title="Bildvorschau" data-html="true" data-content="<img src=\''.$this->hatEinWert($this->id, $this->fremdid, $this->id).'\' class=\'img-responsive center-block\' alt=\'Bitte einen gültigen Bild laden!\'/>"><i class="fa fa-picture-o"></i></a></span><input type="text" class="form-control" placeholder="Ein Wert für '.$this->name.'" aria-describedby="sizing-addon1" id="image'.$genSufix.'" value="'.$this->hatEinWert($this->id, $this->fremdid, $this->id).'"><span class="input-group-btn" id="sizing-addon1"><button type="button" class="btn btn-default" aria-describedby="sizing-addon1" onclick="BrowseServer(\'image'.$genSufix.'\');">Durchsuchen</button></span></div>';
-		$return .= '<div class="hidden" paraarbeit="update" parasuche="var" paranick="image" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div>';
+		if($this->hatEinWert($this->id, $this->fremdid, $this->parentid)){
+		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><a href="#" title="Bildvorschau" id="vorschauimage'.$genSufix.'" data-toggle="popover" title="Bildvorschau" data-html="true" data-content="<img src=\''.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'\' class=\'img-responsive center-block\' alt=\'Bitte einen gültigen Bild laden!\'/>"><i class="fa fa-picture-o"></i></a></span><input type="text" class="form-control" placeholder="Ein Wert für '.$this->name.'" aria-describedby="sizing-addon1" id="image'.$genSufix.'" value="'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'"><span class="input-group-btn" id="sizing-addon1"><button type="button" class="btn btn-default" aria-describedby="sizing-addon1" onclick="BrowseServer(\'image'.$genSufix.'\');">Durchsuchen</button></span></div>';
+		$return .= '<div class="hidden" paraarbeit="update" parasuche="var" paranick="image" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}else{
 		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><a href="#" title="Bildvorschau" id="vorschauimage'.$genSufix.'" data-toggle="popover" title="Bildvorschau" data-html="true" data-content="<img src=\'/adm/dist/img/bildvorschaudefault.jpg\' class=\'img-responsive center-block\' alt=\'Bitte einen gültigen Bild laden!\'/>"><i class="fa fa-picture-o"></i></a></span><input type="text" class="form-control" placeholder="Ein Wert für '.$this->name.'" aria-describedby="sizing-addon1" id="image'.$genSufix.'"><span class="input-group-btn" id="sizing-addon1"><button type="button" class="btn btn-default" aria-describedby="sizing-addon1" onclick="BrowseServer(\'image'.$genSufix.'\');">Durchsuchen</button></span></div>';
-		$return .= '<div class="hidden" paraarbeit="new" parasuche="var" paranick="image" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div>';
+		$return .= '<div class="hidden" paraarbeit="new" parasuche="var" paranick="image" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}
 	}elseif($typFirst==3){
-		if($this->hatEinWert($this->id, $this->fremdid, $this->id)){
-		$return .= '<div class="form-group"><label for="textarea'.$this->id.'_'.$this->fremdid.'_'.$this->fremdid.'">Inhalt für '.$this->name.':</label><textarea class="form-control" rows="5" id="textarea'.$genSufix.'" style="resize:none">'.$this->hatEinWert($this->id, $this->fremdid, $this->id).'</textarea></div>';
-		$return .= '<div class="hidden" paraarbeit="update" parasuche="var" paranick="textarea" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div>';
+		if($this->hatEinWert($this->id, $this->fremdid, $this->parentid)){
+		$return .= '<div class="form-group"><label for="textarea'.$this->id.'_'.$this->fremdid.'_'.$this->fremdid.'">Inhalt für '.$this->name.':</label><textarea class="form-control" rows="5" id="textarea'.$genSufix.'" style="resize:none">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea></div>';
+		$return .= '<div class="hidden" paraarbeit="update" parasuche="var" paranick="textarea" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}else{
 		$return .= '<div class="form-group"><label for="textarea'.$this->id.'_'.$this->fremdid.'_'.$this->fremdid.'">Inhalt für '.$this->name.':</label><textarea class="form-control" rows="5" id="textarea'.$genSufix.'" style="resize:none"></textarea></div>';
-		$return .= '<div class="hidden" paraarbeit="new" parasuche="var" paranick="textarea" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div>';
+		$return .= '<div class="hidden" paraarbeit="new" parasuche="var" paranick="textarea" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}
 	}elseif($typFirst==4){
-		if($this->hatEinWert($this->id, $this->fremdid, $this->id)){
-		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="10" cols="80">'.$this->hatEinWert($this->id, $this->fremdid, $this->id).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'">'.$this->hatEinWert($this->id, $this->fremdid, $this->id).'</textarea>';
-		$return .= '<div class="hidden" paraarbeit="update" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div></div>';
+		if($this->hatEinWert($this->id, $this->fremdid, $this->parentid)){
+		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="10" cols="80">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea>';
+		$return .= '<div class="hidden" paraarbeit="update" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div></div>';
 		}else{
 		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="10" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'"></textarea>';
-		$return .= '<div class="hidden" paraarbeit="new" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->id.'"></div></div>';
+		$return .= '<div class="hidden" paraarbeit="new" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div></div>';
 		}
 
 	}elseif($typFirst==5){
@@ -141,22 +153,16 @@ class GenerateForm{
 		}else{
 		$return .= '<div class="box box-solid box-default"><div class="box-header with-border"><h3 class="box-title">404 Error</h3><small> Panel hat keinen Parameter</small></div></div>';		
 		}*/
-	}
-	/*
-	elseif($typFirst==6){
-	
-		$typSecond = substr($this->type, 2);
-		$Connection = new Connection();
-		$qry = $Connection->query("SELECT * FROM parameter WHERE fremdid = :boxID AND sorte = '1';", array("boxID"=>$typSecond),PDO::FETCH_CLASS, 'ParameterTypeArray');
-		if($qry){
-		foreach($qry as $k => $a){
-		$return .= '<div class="box box-solid box-default"><div class="box-header with-border"><h3 class="box-title">'.$a->name.'</h3><small> Typ: '.$a->typename.'</small></div></div>';	
-		}
+	}elseif($typFirst==6){
+		if($this->hatEinWert($this->id, $this->fremdid, $this->parentid)){
+		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-th-large"></i></span><input type="text" class="form-control" placeholder="Box-Name für '.$this->name.'" aria-describedby="sizing-addon1" id="input'.$genSufix.'" value="'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'"></div>';
+		$return .= '<div class="hidden" paraarbeit="update" parasuche="var" paranick="input" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}else{
-		$return .= '<div class="box box-solid box-default"><div class="box-header with-border"><h3 class="box-title">404 Error</h3><small> Box hat keinen Parameter</small></div></div>';		
+		$return .= '<div class="input-group input-group-lg"><span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-th-large"></i></span><input type="text" class="form-control" placeholder="Box-Name für '.$this->name.'" aria-describedby="sizing-addon1" id="input'.$genSufix.'"></div>';
+		$return .= '<div class="hidden" paraarbeit="new" parasuche="var" paranick="input" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div>';
 		}
-		
-	}*/
+	}
+	
 	return $return;
 	}
 	

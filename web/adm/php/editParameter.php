@@ -27,7 +27,7 @@ if(isset($_GET['id'])){
 <section class="content">
 		  <div class="row">
 	
-		  <div class="col-md-8" id="alleParameterBearbeitungsModus">
+		  <div class="col-md-8 col-sm-12" id="alleParameterBearbeitungsModus">
 		  		<?php 
 				if(count($parameterDetails['parameters'])>0){
 				foreach($parameterDetails['parameters'] as $k => $a){
@@ -73,7 +73,23 @@ if(isset($_GET['id'])){
 				?>
 			
 		  </div>
-		  <div class="col-md-4">
+		  <div class="col-sm-12 col-md-4">
+		  <div class="box box-success">
+		  <div class="box-header with-border">
+			<h3 class="box-title">Übersicht der Parameter</h3>
+		  </div>
+		  <div class="box-body"  id="get_parameterInhalt">
+		  		<?php 
+				if(count($parameterDetails['parameters'])>0){
+				foreach($parameterDetails['parameters'] as $k => $a){
+				?>
+				<div class="btn-group btn-group-justified" role="group"><div class="btn-group" role="group"><a type="button" class="btn btn-default" href="#<?php echo $a->name;?>"><?php echo $a->name;?></a></div><div class="btn-group" role="group"><button type="button" class="btn btn-default" ><?php echo $a->typename;?></button></div></div>
+				<?php
+				}
+				} else{ echo '<div class="alert alert-danger" role="alert">Kein Parameter vorhanden!</div>'; } 
+				?>
+		  </div>
+		  </div>
 		  <div class="box box-danger">
 		  <div class="box-header with-border">
 			<h3 class="box-title">Einstellungen</h3>
@@ -87,26 +103,10 @@ if(isset($_GET['id'])){
 			</div>
 		  </div>
 		  </div>
-		  <div class="box box-success">
-		  <div class="box-header with-border">
-			<h3 class="box-title">Übersicht der Parameter</h3>
-		  </div>
-		  <div class="box-body">
-		  		<?php 
-				if(count($parameterDetails['parameters'])>0){
-				foreach($parameterDetails['parameters'] as $k => $a){
-				?>
-				<div class="btn-group btn-group-justified" role="group"><div class="btn-group" role="group"><a type="button" class="btn btn-default" href="#<?php echo $a->name;?>"><?php echo $a->name;?></a></div><div class="btn-group" role="group"><button type="button" class="btn btn-default" ><?php echo $a->typename;?></button></div></div>
-				<?php
-				}
-				} else{ echo '<div class="alert alert-danger" role="alert">Kein Parameter vorhanden!</div>'; } 
-				?>
-		  </div>
-		  </div>
 		  </div>
 		  </div>
 </section>
-<div id="modalAlles" class="modal fade" role="dialog" aria-labelledby="myModalLabel">
+<div id="modalAlles" abdullah="5" class="modal fade" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">

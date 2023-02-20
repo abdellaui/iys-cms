@@ -9,7 +9,8 @@ class ParameterTypeArray{
 		'1'=>'Input',
 		'2'=>'Bild',
 		'3'=>'Textarea',
-		'4'=>'CKEditor'
+		'4'=>'CKEditor',
+		'6'=>'Box Platzhalter'
 		);
 		$Connection = new Connection();
 		$p = $Connection->query("SELECT id, name FROM panels ORDER BY name ASC;");

@@ -9,7 +9,7 @@ if(isset($_GET['id'])){
 }else{
 	$gettetZahl = 0;
 }
-	if($gettetZahl > 0 && $gettetZahl <8){
+	if($gettetZahl > 0 && $gettetZahl <9){
 	$configFile = array(
 					1 => array(
 						 'name' => 'style.css',
@@ -45,12 +45,16 @@ if(isset($_GET['id'])){
 						 'name' => 'browserconfig.xml',
 						 'type' => 'application/xml',
 						 'url' => ''
+						 ),
+					8 => array(
+						 'name' => 'map.js',
+						 'type' => 'text/typescript',
+						 'url' => 'js/'
 						 )
 				  );
 	$conf = $configFile[$gettetZahl];
-	chdir(__DIR__);
-	$datenname = '../../'.$conf['url'].$conf['name'];
-	$inhalt = file_get_contents($datenname);
+	$datenname = dirname(__FILE__).'/../../'.$conf['url'].$conf['name'];
+	$inhalt = file_get_contents($datenname, FILE_USE_INCLUDE_PATH);
 ?>
 	<script type="text/javascript" src="/adm/plugins/codemirror/lib/codemirror.js"></script>
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/xml/xml.js"></script>
@@ -59,7 +63,16 @@ if(isset($_GET['id'])){
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/php/php.js"></script>
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/clike/clike.js"></script>
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/mode/overlay.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/dialog/dialog.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/searchcursor.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/search.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/scroll/annotatescrollbar.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/matchesonscrollbar.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/jump-to-line.js"></script>
 	<link rel="stylesheet" href="/adm/plugins/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" href="/adm/plugins/codemirror/addon/dialog/dialog.css">
+	<link rel="stylesheet" href="/adm/plugins/codemirror/addon/search/matchesonscrollbar.css">
 <section class="content-header">
           <h1>Konfiguration bearbeiten: <?php echo $conf['name'];?></h1>
           <ol class="breadcrumb">

@@ -1,6 +1,6 @@
 <?php 
 		class Logs {
-		    private $path = __DIR__ . '/logs/';
+		    private $path = '/logs/';
 			public function __construct($typ) {
 				date_default_timezone_set('Europe/Berlin');	
 				$this->path  = dirname(__FILE__)  . $this->path;
@@ -12,7 +12,7 @@
 				$log = $this->path . $date->format('Y-m-d')."-".$this->typ.".txt";
 				if(is_dir($this->path)) {
 					if(!file_exists($log)) {
-						$fh  = fopen($log, 'a+') or die(var_dump($log).var_dump($message));
+						$fh  = fopen($log, 'a+') or die("Fatal Error !");
 						$logcontent = "####################### Uhrzeit : " . $date->format('H:i:s')." #######################r\n\n\n" . $message ."\r\n";
 						fwrite($fh, $logcontent);
 						fclose($fh);

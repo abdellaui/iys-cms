@@ -5,3 +5,10 @@
 /logs/*
 /config/*
 /.idea/
+**/secrets.php
+**/data/cache/*
+**/cache/*
+**/logs/*
+**/data/mysql/*
+*/*.log*
+*.log

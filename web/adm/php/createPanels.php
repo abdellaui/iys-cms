@@ -12,7 +12,16 @@ if ( 'createPanels.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/php/php.js"></script>
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/clike/clike.js"></script>
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/mode/overlay.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/dialog/dialog.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/searchcursor.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/search.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/scroll/annotatescrollbar.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/matchesonscrollbar.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/jump-to-line.js"></script>
 	<link rel="stylesheet" href="/adm/plugins/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" href="/adm/plugins/codemirror/addon/dialog/dialog.css">
+	<link rel="stylesheet" href="/adm/plugins/codemirror/addon/search/matchesonscrollbar.css">
 <section class="content-header">
           <h1 id="namePanelHeader1">Panel erstellen</h1>
 		  <small class="hidden">ID: <input type="hidden" id="panelID" value="<?php echo time();?>"> <input type="hidden" id="panelTYPE" value="new"></small>
@@ -28,38 +37,25 @@ if ( 'createPanels.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 			<h4>Information!</h4>
 
 			<p>Panels beinhalten Items, welche in der Parameterverwaltungs-Ansicht unbegrenzt eingefügt werden können. Die Items können Parameter im Typ von Input, Bild, Textarea und CKEditor besitzen.</p>
+			<p>Parameter werden folgend initiallisiert: <b>{{<u>name</u>}}</b></p>
 		  </div>
 		</div>
-		  <div class="col-md-8">
+		  <div class="col-md-8 col-sm-12">
 			<div class="box box-warning">
 			  <div class="box-header with-border">
 				<h3 class="box-title">HTML-Editor</h3>
 			  </div>
 			  <div class="box-body">
-					<textarea name="panelSource" id="panelSource" rows="25" cols="130"></textarea>
+					<textarea name="panelSource" id="panelSource" rows="25" cols="10"></textarea>
 					<textarea class="hidden" id="panelSourceInhalt"></textarea>
 			  </div>
 			</div>
 		  </div>
-		  <div class="col-md-4">
-		  <div class="box box-danger">
-		  <div class="box-header with-border">
-			<h3 class="box-title">Einstellungen</h3>
-		  </div>
-		  <div class="box-body">
-			<div class="input-group input-group-lg" id="panelNameWrapAlert">
-			  <span class="input-group-addon" id="sizing-addon1">Name</span>
-			  <input type="text" class="form-control" placeholder="Name des Panels" aria-describedby="sizing-addon1" id="panelName">
-			</div>
-			<p>
-			<div class="row">
-				<div class="col-md-12 col-sm-12" id="panelButtonBereich">
-				<div class="btn btn-success col-md-12 col-sm-12 col-xs-12" id="panelHinzufuegen">Panel hinzufügen</div>
-				</div>
-			</div>
-			</p>
-		  </div>
-		  </div>
+		  <div class="col-md-4 col-sm-12">
+		  <?php
+		  $mvc = new MVCManager();
+		  echo $mvc->getList();
+		  ?>
 		  <div class="box box-success">
 		  <div class="box-header with-border">
 			<h3 class="box-title">Parameter</h3>
@@ -100,6 +96,24 @@ if ( 'createPanels.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-6">
 				<div class="btn btn-danger col-md-12" id="parameterAbbrechen">Abbrechen</div>
+				</div>
+			</div>
+			</p>
+		  </div>
+		  </div>
+		  <div class="box box-danger">
+		  <div class="box-header with-border">
+			<h3 class="box-title">Einstellungen</h3>
+		  </div>
+		  <div class="box-body">
+			<div class="input-group input-group-lg" id="panelNameWrapAlert">
+			  <span class="input-group-addon" id="sizing-addon1">Name</span>
+			  <input type="text" class="form-control" placeholder="Name des Panels" aria-describedby="sizing-addon1" id="panelName">
+			</div>
+			<p>
+			<div class="row">
+				<div class="col-md-12 col-sm-12" id="panelButtonBereich">
+				<div class="btn btn-success col-md-12 col-sm-12 col-xs-12" id="panelHinzufuegen">Panel hinzufügen</div>
 				</div>
 			</div>
 			</p>

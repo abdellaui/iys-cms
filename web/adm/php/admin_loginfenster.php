@@ -68,7 +68,7 @@ if(isset($_POST['psw']) && $_GET['login']){
         </form>
       </div>
       <div class="lockscreen-footer text-center">
-        Copyright &copy; <?php echo date("Y");?> <b>IYS-CMS</b><br>
+        Copyright &copy; <?php echo date("Y");?> <b>Abdullah Sahin</b><br>
         All rights reserved
       </div>
     </div>

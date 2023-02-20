@@ -90,7 +90,7 @@ if(isset($_POST['boxId'])){
 }
 }elseif($page==6 && isset($_POST['pageconfigid']) && isset($_POST['pageconfiginhalt'])){
 	$postedZahl = (int) $_POST['pageconfigid'];
-	if($postedZahl > 0 && $postedZahl <8){
+	if($postedZahl > 0 && $postedZahl <9){
 	$configFile = array(
 					1 => array(
 						 'name' => 'style.css',
@@ -119,10 +119,14 @@ if(isset($_POST['boxId'])){
 					7 => array(
 						 'name' => 'browserconfig.xml',
 						 'url' => ''
+						 ),
+					8 => array(
+						 'name' => 'map.js',
+						 'url' => 'js/'
 						 )
 				  );
 	$conf = $configFile[$postedZahl];
-	$datenname = '"../../../../'.$conf['url'].$conf['name'].'"';
+	$datenname = dirname(__FILE__).'/../../'.$conf['url'].$conf['name'];
 	$current_inhalt = file_get_contents($datenname);
 	if($current_inhalt != $_POST['pageconfiginhalt']){
 	if(file_put_contents($datenname, $_POST['pageconfiginhalt'])){
@@ -175,6 +179,23 @@ if($_POST['tool']=='ins'){
 	
 }elseif($page==12 && isset($_POST['id'])){
 	$c = new PanelItem();
+	echo $c->gibForm($_POST['id']);
+}elseif($page==13 && isset($_POST['neue'])){
+$user = new UserDetail($_SESSION['login']);
+echo $user->modusAendern($_POST['neue']);
+}elseif($page==14){
+
+if(empty($_POST['parameters'])|| $_POST['parameters'] == 'noParameters'){$varPara ='null';}else{$varPara = $_POST['parameters'];}
+$b = new MVCManager();
+$b->updateParameters($varPara);
+echo json_encode($b->gibDaten());
+}elseif($page==15 && isset($_POST['itemId']) && isset($_POST['parameterInhalt']) && (is_array($_POST['parameterInhalt']) || is_object($_POST['parameterInhalt']))){
+if(empty($_POST['parameterInhalt'])|| $_POST['parameterInhalt'] == 'noParameters'){$varPara ='null';}else{$varPara = $_POST['parameterInhalt'];}
+	$paraInhalt=new MVCManager();
+	$paraInhalt->updateParametersContent($varPara);
+	echo $paraInhalt->gibForm($_POST['itemId']);
+}elseif($page==16 && isset($_POST['id'])){
+	$c = new MVCManager();
 	echo $c->gibForm($_POST['id']);
 }else{
 echo 0;

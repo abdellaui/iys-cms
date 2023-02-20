@@ -22,7 +22,16 @@ if(isset($_GET['id'])){
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/php/php.js"></script>
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/clike/clike.js"></script>
 	<script type="text/javascript" src="/adm/plugins/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/mode/overlay.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/dialog/dialog.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/searchcursor.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/search.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/scroll/annotatescrollbar.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/matchesonscrollbar.js"></script>
+	<script type="text/javascript" src="/adm/plugins/codemirror/addon/search/jump-to-line.js"></script>
 	<link rel="stylesheet" href="/adm/plugins/codemirror/lib/codemirror.css">
+	<link rel="stylesheet" href="/adm/plugins/codemirror/addon/dialog/dialog.css">
+	<link rel="stylesheet" href="/adm/plugins/codemirror/addon/search/matchesonscrollbar.css">
 <section class="content-header">
           <h1 id="namePanelHeader1">Panel bearbeiten: <?php echo $panelDetails['panelname'];?></h1>
 		  <small class="hidden">ID: <input type="hidden" id="panelID" value="<?php echo $panelDetails['panelid'];?>"> <input type="hidden" id="panelTYPE" value="update"></small>
@@ -33,37 +42,22 @@ if(isset($_GET['id'])){
 </section>
 <section class="content">
 		  <div class="row">
-		  <div class="col-md-8">
+		  <div class="col-md-8 col-sm-12">
 			<div class="box box-warning">
 			  <div class="box-header with-border">
 				<h3 class="box-title">HTML-Editor</h3>
 			  </div>
 			  <div class="box-body">
-					<textarea name="panelSource" id="panelSource" rows="25" cols="130"><?php echo $panelDetails['source'];?></textarea>
+					<textarea name="panelSource" id="panelSource" rows="25" cols="10"><?php echo $panelDetails['source'];?></textarea>
 					<textarea class="hidden" id="panelSourceInhalt"><?php echo $panelDetails['source'];?></textarea>
 			  </div>
 			</div>
 		  </div>
-		  <div class="col-md-4">
-		  <div class="box box-danger">
-		  <div class="box-header with-border">
-			<h3 class="box-title">Einstellungen</h3>
-		  </div>
-		  <div class="box-body">
-			<div class="input-group input-group-lg" id="panelNameWrapAlert">
-			  <span class="input-group-addon" id="sizing-addon1">Name</span>
-			  <input type="text" class="form-control" placeholder="Name des Panels" aria-describedby="sizing-addon1" id="panelName" value="<?php echo $panelDetails['panelname'];?>">
-			</div>
-			<p>
-			<div class="row">
-				<div class="col-md-12 col-sm-12" id="panelButtonBereich">
-				<div class="btn btn-success col-md-12 col-sm-12 col-xs-12" id="panelHinzufuegen">Panel speichern</div>
-				<br><br><div class="btn btn-danger col-md-12 col-sm-12 col-xs-12" onclick="loeschePanel(<?php echo $panelDetails['panelid'];?>);">Panel löschen</div>
-				</div>
-			</div>
-			</p>
-		  </div>
-		  </div>
+		  <div class="col-md-4 col-sm-12">
+		  <?php
+		  $mvc = new MVCManager();
+		  echo $mvc->getList();
+		  ?>
 		  <div class="box box-success">
 		  <div class="box-header with-border">
 			<h3 class="box-title">Parameter</h3>
@@ -112,6 +106,25 @@ if(isset($_GET['id'])){
 				</div>
 				<div class="col-md-6 col-sm-6 col-xs-6">
 				<div class="btn btn-danger col-md-12" id="parameterAbbrechen">Abbrechen</div>
+				</div>
+			</div>
+			</p>
+		  </div>
+		  </div>
+		  <div class="box box-danger">
+		  <div class="box-header with-border">
+			<h3 class="box-title">Einstellungen</h3>
+		  </div>
+		  <div class="box-body">
+			<div class="input-group input-group-lg" id="panelNameWrapAlert">
+			  <span class="input-group-addon" id="sizing-addon1">Name</span>
+			  <input type="text" class="form-control" placeholder="Name des Panels" aria-describedby="sizing-addon1" id="panelName" value="<?php echo $panelDetails['panelname'];?>">
+			</div>
+			<p>
+			<div class="row">
+				<div class="col-md-12 col-sm-12" id="panelButtonBereich">
+				<div class="btn btn-success col-md-12 col-sm-12 col-xs-12" id="panelHinzufuegen">Panel speichern</div>
+				<br><br><div class="btn btn-danger col-md-12 col-sm-12 col-xs-12" onclick="loeschePanel(<?php echo $panelDetails['panelid'];?>);">Panel löschen</div>
 				</div>
 			</div>
 			</p>

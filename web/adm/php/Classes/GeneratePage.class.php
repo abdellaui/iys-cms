@@ -4,7 +4,7 @@ class GeneratePage{
 	public function __construct(){
 		$this->Connection = new Connection();
 	}
-	public function gibAlleParameters($getId, $getSorte, $itemId=0){
+	private function ersetzeParameterMitInhalt($getId, $getSorte, $itemId=0){
 		$Suche = array();
 		$Finde = array();
 			if($getSorte==1){
@@ -12,6 +12,7 @@ class GeneratePage{
 			}else{
 				$panelOderBox = $this->Connection->query("SELECT * FROM panels WHERE id = :getId;", array("getId"=>$getId));
 			}
+		if(count($panelOderBox)>0){
 		$dbGetId = $panelOderBox[0]['id'];
 		$dbGetName = $panelOderBox[0]['name'];
 		$dbGetSource = $panelOderBox[0]['source'];
@@ -66,18 +67,82 @@ class GeneratePage{
 								$Finde[] = $test;
 								foreach($item as $d => $i){
 									$Suche[] = '{{'.$a['name'].$i['id'].'}}';
-									$Finde[] = $this->gibAlleParameters($typSecondLetter,2,$i['id']);
+									$Finde[] = $this->ersetzeParameterMitInhalt($typSecondLetter,2,$i['id']);
 								}
 						}
 				}elseif($typFirstLetter==6){
 					$typSecondLetter = substr($a['type'],2);
 					$Suche[] = '{{'.$a['name'].'}}';
-					$Finde[] = $this->gibAlleParameters($typSecondLetter,1);
+					$Finde[] = $this->ersetzeParameterMitInhalt($typSecondLetter,1);
 					
 				}
 		}
-		//return str_replace($Suche,$Finde,$dbGetSource);
-		return preg_replace('/\t|\n|\r|  |\x0B|\0/','',str_replace($Suche,$Finde,$dbGetSource));
+		return str_replace($Suche,$Finde,$dbGetSource);
+		}else{
+			return '';
+		}
+	}
+		
+
+
+
+		private function gibGetParameter($getter){
+		$Suche = array();
+		$Finde = array();
+			foreach ($getter  as $key => $value) {
+				$GLOBALS['mvcNameToIndex'][$value['name']]=count($Suche);
+				$typFirstLetter = $value['type'];
+				if($typFirstLetter==1 || $typFirstLetter==2 || $typFirstLetter==3 || $typFirstLetter==4){
+									$nameToSe='{{$_GET::'.$value['name'].'}}';
+										if($value['wert']){
+											$Suche[] = $nameToSe;
+			
+											$valueP = $value['wert'];
+
+											if($valueP!='' || $valueP!=' '){
+												if($typFirstLetter==3){
+												$Finde[] = nl2br($valueP);
+												}else{
+												$Finde[] = $valueP;
+												}
+											}else{
+												$Finde[] = $nameToSe;
+											}
+										}else{
+											$Suche[] = $nameToSe;
+											$Finde[] = $nameToSe;
+										}
+				}elseif($typFirstLetter==6){
+					$Suche[] = '{{$_GET::'.$value['name'].'}}';
+					$panelOderBox = $this->Connection->query("SELECT * FROM boxes WHERE name = :getName;", array("getName"=>$value['wert']));
+					if(count($panelOderBox)>0){
+						$Finde[] = $this->ersetzeParameterMitInhalt($panelOderBox[0]['id'],1);
+					}else{
+						$Finde[] = '{{$_GET::'.$value['name'].'}}';
+					}
+			
+					
+				}
+			}
+			return array($Suche,$Finde);
+		}
+
+
+
+		public function gebeSeite($getter, $head, $body){
+			$GLOBALS['replacer'] = $this->gibGetParameter($getter);
+
+			$var = '<html lang="de"><head>';
+			$var .= htmlspecialchars_decode($this->ersetzeParameterMitInhalt($head, 1),ENT_HTML5);
+			$var .='</head><body>';
+			ob_start();
+			eval('?>'.htmlspecialchars_decode($this->ersetzeParameterMitInhalt($body, 1),ENT_HTML5));
+			$var .= ob_get_contents();
+			ob_end_clean();
+			$var .= '</body></html>';
+			$returnInhalt = str_replace($GLOBALS['replacer'][0], $GLOBALS['replacer'][1], $var);
+
+			return preg_replace('/\t|\n|\r|   |\x0B|\0/','',$returnInhalt);
 		}
 }
 ?>

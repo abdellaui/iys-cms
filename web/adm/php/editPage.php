@@ -6,6 +6,7 @@ if ( 'editPage.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 }
 
 ?>
+<script type="text/javascript" src="/adm/plugins/ckfinder/ckfinder.js"></script>
 <section class="content-header">
           <h1>Seiten bearbeiten</h1>
           <ol class="breadcrumb">
@@ -73,3 +74,20 @@ if ( 'editPage.php' == basename($_SERVER['SCRIPT_FILENAME']) )
 		  </div>
 		  </div>
 </section>
+<div id="modalAlles" abdullah="15" class="modal fade" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+		<button type="button" class="close" id="btnModalAbbrechen" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Ladet...</h4>
+      </div>
+      <div class="modal-body">
+        <p>Ladet...</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" id="btnModalSpeichern">Speichern</button>
+		<button type="button" class="btn btn-danger" id="btnModalAbbrechen">Abbrechen</button>
+      </div>
+    </div>
+  </div>
+</div>

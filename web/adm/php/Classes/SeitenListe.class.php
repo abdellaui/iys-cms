@@ -46,7 +46,12 @@ class SeitenListe{
 				<div class="form-group">
 					<label for="tools">&nbsp;</label>
 					<div class="btn-group btn-group-justified" role="group" id="seite_'.$a['id'].'">
-					<div class="btn-group" role="group" onclick="pageLoeschen('.$a['id'].');"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Löschen</button></div>
+					<div class="btn-group" role="group" onclick="mvcBearbeiten('.$a['id'].');">
+					<button type="button" class="btn btn-success"><span class="glyphicon glyphicon-pencil"></span> MVC</button>
+					</div>
+					<div class="btn-group" role="group" onclick="pageLoeschen('.$a['id'].');">
+					<button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Löschen</button>
+					</div>
 					</div>
 				</div>
 			</div>

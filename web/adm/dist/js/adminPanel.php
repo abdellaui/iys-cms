@@ -9,12 +9,13 @@ echo '
 /*
 IYS-CMS
 (c) '.date("Y").' by Abdullah Sahin. All rights reserved.
-*/';
+*/
+';
 
 ?>
-bearbeitungsModus = false;
-editable=true;
-hasChanged = false;
+var bearbeitungsModus = false;
+var editable=true;
+var hasChanged = 0;
 
 $(window).bind('beforeunload', function() {
 	if(hasChanged){
@@ -34,12 +35,12 @@ function BrowseServer( elementId ) {
 				var file = evt.data.files.first();
 				$('#'+elementId).val(file.getUrl());
 				$('#vorschau'+elementId).attr('data-content', '<img src=\''+file.getUrl()+'\' class=\'img-responsive center-block\' alt=\'Bitte einen gültigen Bild laden!\'/>');
-				hasChanged = true;
+				hasChanged = 1;
 			} );
 			finder.on( 'file:choose:resizedImage', function( evt ) {
 				$('#'+elementId).val(evt.data.resizedUrl);
 				$('#vorschau'+elementId).attr('data-content', '<img src=\''+evt.data.resizedUrl+'\' class=\'img-responsive center-block\' alt=\'Bitte einen gültigen Bild laden!\'/>');
-				hasChanged = true;
+				hasChanged = 2;
 			} );
 		}
 	} );
@@ -66,26 +67,45 @@ var isMobile = {
 };
 window.onload = function(){
 	reloadCkeditor();
+	if(document.getElementById("boxSource") || document.getElementById("panelSource")){
+	CodeMirror.defineMode("meinMode", function(config, parserConfig) {
+	  var mustacheOverlay = {
+	    token: function(stream, state) {
+	      var ch;
+	      if (stream.match("{{")) {
+	        while ((ch = stream.next()) != null)
+	          if (ch == "}" && stream.next() == "}") {
+	            stream.eat("}");
+	            return "parameterHalter";
+	          }
+	      }
+	      while (stream.next() != null && !stream.match("{{", false)) {}
+	      return null;
+	    }
+	  };
+	  return CodeMirror.overlayMode(CodeMirror.getMode(config, "htmlmixed"), mustacheOverlay);
+	});
+	}
 	if(document.getElementById("boxSource")){
-		var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("boxSource"), { lineNumbers: true, lineWrapping: true, mode: "htmlmixed", tabSize:4, indentWithTabs:true, autofocus:true});
+		var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("boxSource"), { lineNumbers: true, lineWrapping: true, mode: "meinMode", tabSize:4, indentWithTabs:true, autofocus:true});
 		myCodeMirror.setSize("auto", "70vh");
-		myCodeMirror.on( 'change', function( evts ) {var benaedittext = myCodeMirror.getValue();$('#boxSourceInhalt').text(benaedittext).html(); hasChanged = true;});
+		myCodeMirror.on( 'change', function( evts ) {var benaedittext = myCodeMirror.getValue();$('#boxSourceInhalt').text(benaedittext).html(); hasChanged = 3;});
 		}
 	if(document.getElementById("panelSource")){
-		var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("panelSource"), { lineNumbers: true, lineWrapping: true, mode: "htmlmixed", tabSize:4, indentWithTabs:true, autofocus:true});
+		var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("panelSource"), { lineNumbers: true, lineWrapping: true, mode: "meinMode", tabSize:4, indentWithTabs:true, autofocus:true});
 		myCodeMirror.setSize("auto", "70vh");
-		myCodeMirror.on( 'change', function( evts ) {var benaedittext = myCodeMirror.getValue();$('#panelSourceInhalt').text(benaedittext).html(); hasChanged = true;});
+		myCodeMirror.on( 'change', function( evts ) {var benaedittext = myCodeMirror.getValue();$('#panelSourceInhalt').text(benaedittext).html(); hasChanged = 4;});
 		}
 		
 	if(document.getElementById("pageConfig")){
 		var tpyeMirror = $('#pageConfigInhalt').attr('abdullahValue');
 		var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("pageConfig"), { lineNumbers: true, lineWrapping: true, mode: tpyeMirror, tabSize:4, indentWithTabs:true, autofocus:true});
 		myCodeMirror.setSize("auto", "70vh");
-		myCodeMirror.on( 'change', function( evts ) {var benaedittext = myCodeMirror.getValue();$('#pageConfigInhalt').text(benaedittext).val(); hasChanged = true;});
+		myCodeMirror.on( 'change', function( evts ) {var benaedittext = myCodeMirror.getValue();$('#pageConfigInhalt').text(benaedittext).val(); hasChanged = 5;});
 		}
 };
 $(document).ready(function() {
-$('input, textarea').on( 'change', function( evts ) {hasChanged = true;});
+$(document).on('change', '.content>input, .content>textarea', function( evts ) {hasChanged = 6;});
 $('#logoutpanel').on('click', function(e){
 		$.post("/adm/interface/7", { doing : 'logout'}).done(function(data) {
 			if($.isNumeric(data)){
@@ -113,14 +133,14 @@ return false;
 $('#abbrechenEgalWas').on('click', function(e){
 	$.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du brichst etwas ab!", function(e) {
 	if(e == true){
-	hasChanged = false;
-	window.location.href = location.pathname+'&reload';
+	hasChanged = 0;
+	window.location.href = location.pathname+'!#reload';
 	}
 	});
 });
 
 $('#configPageSpeichern').on('click', function(e){
-	hasChanged = false;
+	hasChanged = 0;
 	var getConfigId = $('#pageConfigInhalt').attr('abdullahValueIki');
 	var getConfigInhalt = $('#pageConfigInhalt').val();
 		$.post("/adm/interface/6", { pageconfigid: getConfigId, pageconfiginhalt: getConfigInhalt}).done(function(data) {
@@ -133,7 +153,7 @@ $('#configPageSpeichern').on('click', function(e){
 });
 
 $('#parameterHinzufuegen').on('click', function(e){
-hasChanged = true;
+hasChanged = 7;
 var paraName = leerzeichenErsetzen($('#parameterName').val());
 var paraTyp = $('#parameterTyp').val();
 var paraTypName = $("#parameterTyp option[value='"+paraTyp+"']").text();
@@ -160,7 +180,7 @@ return false;
 });
 
 $('#boxHinzufuegen').on('click', function(e){
-hasChanged = false;
+hasChanged = 0;
 if(editable==true && bearbeitungsModus==false){
 var boxName = leerzeichenErsetzen($('#boxName').val());
 var boxSource = $('#boxSourceInhalt').html();
@@ -222,8 +242,40 @@ if(boxName!="" && boxSource!="" && $.inArray(boxName, alleBoxNamen)=="-1"){
 }
 });
 
+
+
+$('#mvcSpeichern').on('click', function(e){
+hasChanged = 0;
+if(editable==true && bearbeitungsModus==false){
+	editable = false;
+	bearbeitungsModus = true;
+	var bParameter = gibAlleParameter();
+	if(bParameter===null){
+		bParameter = 'noParameters';
+	}
+	$.post("/adm/interface/14", {parameters: bParameter}).done(function(data) {
+	var getData = $.parseJSON(data);
+		if($.isNumeric(getData.success)){
+			alertToast('success', 'Super !', 'Du hast die MVC Parameter erfolgreich bearbeitet!');
+					if(getData.parameters.length>0){
+						$('#parameterInhalt').html('');
+					$.each(getData.parameters, function(i, item) {
+						$('#parameterInhalt').append('<div class="btn-group btn-group-justified" role="group" id="paraBox_'+item.id+'"><div class="btn-group" role="group"><button type="button" class="btn btn-default" abdullahValue="old" id="paraName_'+item.id+'">'+item.name+'</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default" id="paraTyp_'+item.id+'" abdullahValue="'+item.type+'">'+item.typename+'</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aktion<span class="caret"></span></button><ul class="dropdown-menu"><li onclick="bearbeitePara('+item.id+');"><a>Bearbeiten</a></li><li onclick="loeschePara('+item.id+');"><a>Löschen</a></li></ul></div></div>');
+					});
+					}
+		}
+    });
+	editable = true;
+	bearbeitungsModus = false;
+}else{
+	alertToast('error', 'Vorsicht !', 'Ein Parameter wird noch bearbeitet!');
+}
+});
+
+
+
 $('#panelHinzufuegen').on('click', function(e){
-hasChanged = false;
+hasChanged = 0;
 if(editable==true && bearbeitungsModus==false){
 var panelName = leerzeichenErsetzen($('#panelName').val());
 var panelSource = $('#panelSourceInhalt').html();
@@ -285,7 +337,7 @@ if(panelName!="" && panelSource!="" && $.inArray(panelName, allePanelNamen)=="-1
 });
 
 $('#parameterInhaltSpeichern').on('click', function(e){
-hasChanged = false;
+hasChanged = 0;
 if(editable==true && bearbeitungsModus==false){
 var idBox = $('#parameterInhaltBoxId').val();
 if(idBox!=""){
@@ -354,7 +406,21 @@ $('#einstellung_email_aendern').on('click', function(e){
 	bearbeitungsModus = false;
 });
 
+$('#einstellung_modus').on('change', function(e){
+	var modus = ($('#einstellung_modus').prop('checked'))?1:0;
+	$.post("/adm/interface/13", {neue: modus}).done(function(data) {
+	if($.isNumeric(data) && data ==1){
+			alertToast('success', 'Super !', 'Du hast erfolgreich deine E-Mail geändert!');
+			window.location.href = location.pathname+'!#reload';
+		
+	}else{
+		alertToast('error', 'Leider !', 'Ein unerwarteter Fehler ist aufgetreten!');
+	}
+    });
 
+	editable = true;
+	bearbeitungsModus = false;
+});
 
 $("#seiten_bodytag, #seiten_headtag ,#seiten_urls, #seiten_names").change(function(){
   var b = $(this).parent(".form-group").parent("div").parent(".row").attr('abdullahSeitenId');
@@ -370,8 +436,8 @@ $('#pageHinzufuegen').on('click',function(e){
 		$.post("/adm/interface/10", { tool:'ins', urls : a, names : b, hbox: c, bbox: d}).done(function(data) {
 			if(data==1){
 			alertToast('success', 'Super !', 'Du hast eine Seite erfolgreich hinzugefügt!');
-			hasChanged = false;
-			window.location.href = location.pathname+'&reload';
+			hasChanged = 0;
+			window.location.href = location.pathname+'!#reload';
 			}else{
 			alertToast('error', 'Fehler !', 'Unerklärlicher Fehler!');
 			}
@@ -467,7 +533,7 @@ $.extend({
 });
 
 function loescheBox(id){
-	hasChanged = false;
+	hasChanged = 0;
 	if(editable==true && bearbeitungsModus==false){
 		$.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du löschst einen Box!", function(e) {
 		if(e == true){
@@ -490,7 +556,7 @@ function loescheBox(id){
 }
 
 function loeschePanel(id){
-	hasChanged = false;
+	hasChanged = 0;
 	if(editable==true && bearbeitungsModus==false){
 		$.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du löschst einen Panel!", function(e) {
 		if(e == true){
@@ -524,7 +590,7 @@ String.prototype.matchAll = function(regexp) {
 
 function gibAlleParameterNamen(){
 	if($('#parameterInhalt').length && $.trim($('#parameterInhalt').html()) != '<div class="alert alert-danger" role="alert">Kein Parameter vorhanden!</div>'){
-		var reg = /<button type="button" class="btn btn-default" abdullahvalue="[old|new|update|delete]+" id="paraName_[0-9]+">([a-zA-Z0-9.+\W]+)<\/button>/gi;
+		var reg = /<button type="button" class="btn btn-default" abdullahvalue="[old|new|update|delete]+" id="paraName_[0-9]+">([^<]+)<\/button>/gi;
 		var str = $("#parameterInhalt").html();
 		var arr = str.matchAll(reg);
 		if(arr!=null){
@@ -542,7 +608,7 @@ function gibAlleParameterNamen(){
 }
 function gibAlleBoxNamen(){
 	if($('#boxVerwaltungListe').length){
-		var reg = /<li id="boxVerwaltungListePunkt_[0-9]+"><a href="\/adm\/boxupdate\/[0-9]+">([a-zA-Z0-9.+\W]+)<\/a><\/li>/gi;
+		var reg = /<li id="boxVerwaltungListePunkt_[0-9]+"><a href="\/adm\/boxupdate\/[0-9]+">([^<]+)<\/a><\/li>/gi;
 		var str = $("#boxVerwaltungListe").html();
 		var arr = str.matchAll(reg);
 		if(arr!=null){
@@ -560,7 +626,7 @@ function gibAlleBoxNamen(){
 }
 function gibAllePanelNamen(){
 	if($('#panelVerwaltungListe').length){
-		var reg = /<li id="panelVerwaltungListePunkt_[0-9]+"><a href="\/adm\/panelupdate\/[0-9]+">([a-zA-Z0-9.+\W]+)<\/a><\/li>/gi;
+		var reg = /<li id="panelVerwaltungListePunkt_[0-9]+"><a href="\/adm\/panelupdate\/[0-9]+">([^<]+)<\/a><\/li>/gi;
 		var str = $("#panelVerwaltungListe").html();
 		var arr = str.matchAll(reg);
 		if(arr!=null){
@@ -578,9 +644,10 @@ function gibAllePanelNamen(){
 }
 function gibAlleParameter(){
 	if($('#parameterInhalt').length && $.trim($('#parameterInhalt').html()) != '<div class="alert alert-danger" role="alert">Kein Parameter vorhanden!</div>'){
-	var reg = /<button type="button" class="btn btn-default" abdullahValue="([new|update|delete]+)" id="paraName_([0-9]+)\">([a-zA-Z0-9.+\W]+)<\/button><\/div><div class="btn-group" role="group"><button type="button" class="btn btn-default" id="paraTyp_[0-9]+" abdullahValue="([{0-9_}]+)">[a-zA-Z0-9.+\W]+<\/button>/gi;
+	var reg = /<button type="button" class="btn btn-default" abdullahValue="([new|update|delete]+)" id="paraName_([0-9]+)\">([^<]+)<\/button><\/div><div class="btn-group" role="group"><button type="button" class="btn btn-default" id="paraTyp_[0-9]+" abdullahValue="([{0-9_}]+)">([^<]+)<\/button>/gi;
 	var str = $("#parameterInhalt").html();
 	var arr = str.matchAll(reg);
+	
 	return arr;
 	}else{
 	return [];
@@ -588,7 +655,7 @@ function gibAlleParameter(){
 }
 function bearbeitePara(i){
 if(!bearbeitungsModus){
-hasChanged = true;
+hasChanged = 8;
 bearbeitungsModus = true;
 var paraName = $('#paraName_'+i).html();
 var paraTyp = $('#paraTyp_'+i).attr('abdullahValue');
@@ -623,7 +690,7 @@ function loescheAlleDivs(div){
 function loeschePara(i){
 $.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du löschst einen Parameter!", function(e) {
 	if(e == true){
-	hasChanged = true;
+	hasChanged = 9;
 	var anzahlDivs = $("#parameterInhalt > div:not([style])").length;
 	var anzahlDifferenz = anzahlDivs-1;
 	var paraStatus = $('#paraName_'+i).attr('abdullahValue');
@@ -643,18 +710,18 @@ $.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du löschst einen Paramet
 function showBearbeitetePara(i){
 	bearbeitungsModus = false;
 	$('#bearbeiteParameter').remove();
-	$('#paraBox_'+i).css("display","block");
+	$('#paraBox_'+i).css("display","table");
 }
 function abbrechenParameter(i){
 $.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du brichst grad die Bearbeitung eines Parameters ab!", function(e) {
 	if(e == true){
-	hasChanged = true;
+	hasChanged = 10;
 	showBearbeitetePara(i)
 	}
 });
 }
 function speicherParameter(i){
-	hasChanged = true;
+	hasChanged = 11;
 	var paraName = leerzeichenErsetzen($('#parameterNameBearbeitung').val());
 	var paraTyp = $('#parameterTypBearbeitung').val();
 	var paraStatus = $('#paraName_'+i).attr('abdullahValue');
@@ -668,7 +735,7 @@ function speicherParameter(i){
 	}
 	if(paraName!="" && paraTyp!="0"){
 	var paraTypName = $("#parameterTypBearbeitung option[value='"+paraTyp+"']").text();
-	$('#paraBox_'+i).html('<div class="btn-group btn-group-justified" role="group" id="paraBox_'+i+'"><div class="btn-group" role="group"><button type="button" class="btn btn-default" abdullahValue="'+statusBearbeitetBox+'" id="paraName_'+i+'">'+paraName+'</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default" id="paraTyp_'+i+'" abdullahValue="'+paraTyp+'">'+paraTypName+'</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aktion<span class="caret"></span></button><ul class="dropdown-menu"><li onclick="bearbeitePara('+i+');"><a>Bearbeiten</a></li><li onclick="loeschePara('+i+');"><a>Löschen</a></li></ul></div></div>');
+	$('#paraBox_'+i).html('<div class="btn-group" role="group"><button type="button" class="btn btn-default" abdullahValue="'+statusBearbeitetBox+'" id="paraName_'+i+'">'+paraName+'</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default" id="paraTyp_'+i+'" abdullahValue="'+paraTyp+'">'+paraTypName+'</button></div><div class="btn-group" role="group"><button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Aktion<span class="caret"></span></button><ul class="dropdown-menu"><li onclick="bearbeitePara('+i+');"><a>Bearbeiten</a></li><li onclick="loeschePara('+i+');"><a>Löschen</a></li></ul></div>');
 	showBearbeitetePara(i)
 	alertToast('success', '', 'Du hast erfolgreich die Parameter bearbeitet!');
 	}
@@ -708,20 +775,20 @@ return d;
 function reloadCkeditor(){
 $('[data-toggle="popover"]').popover({ trigger: "hover" });
 $('[data-toggle="popover"]').on('click', function(e){e.preventDefault(); return false;});
-$('input, textarea').on( 'change', function( evts ) {hasChanged = true;});
+$(document).on('change', '.content>input, .content>textarea', function( evts ) {hasChanged = 12});
   $('.ckeditorGenerator').each(function(){
+	  $(this).fadeIn('fast');
 	var thisId = $(this).attr('abdullahValue');
-	$('#ckeditorFrame'+thisId).fadeIn('fast');
 	if(isMobile.any()){
 	$('#ckeditorFrame'+thisId).html('<div class="alert alert-danger" role="alert">Dieser Bereich ist nur mit einem Computer bearbeitbar!</div>');
 	} else {
-    var editorCKeditor = CKEDITOR.replace('ckeditor'+thisId,{skin:'office2013',allowedContent:true,contentsCss:[ '/css/bootstrap.min.css', '/css/style.css' ],
+    var editorCKeditor = CKEDITOR.replace('ckeditor'+thisId,{skin:'office2013',allowedContent:true,contentsCss:[ '/css/boostrap.min.css', '/css/style.css', '/css/ckeditor.css' ],
 			filebrowserBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html',
 			filebrowserImageBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html?type=Images',
 			filebrowserUploadUrl: '/adm/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
 			filebrowserImageUploadUrl: '/adm/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images'});
 	editorCKeditor.on( 'change', function( evt ) {
-		hasChanged = true;
+		hasChanged = 13;
    var textCKeditor = evt.editor.getData();
    $('#ckeditorInhalt'+thisId).val(textCKeditor);
 	});
@@ -771,9 +838,9 @@ function pageSpeichern(e){
 		if(h==5){
 		$.post("/adm/interface/10", { tool:'upd', id:e , urls : a, names : b, hbox: c, bbox: d}).done(function(data) {
 			if(data==1){
-			hasChanged = false;
+			hasChanged = 0;
 			$('[abdullahSeitenId="'+e+'"] > div > div > #seiten_urls').val(a)
-			$('[abdullahSeitenId="'+e+'"] > div > div > #seite_'+e).html('<div class="btn-group" role="group" onclick="pageLoeschen('+e+');"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-trash"></span> Löschen</button></div>');
+			$('[abdullahSeitenId="'+e+'"] > div > div > #seite_'+e).html('<div class="btn-group" role="group" onclick="mvcBearbeiten('+e+');"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-pencil"></span> MVC</button></div><div class="btn-group" role="group" onclick="pageLoeschen('+e+');"><button type="button" class="btn btn-success"><span class="glyphicon glyphicon-trash"></span> Löschen</button></div>');
 			alertToast('success', 'Super !', 'Du hast eine Seite erfolgreich bearbeitet!');
 			}else{
 			alertToast('error', 'Fehler !', 'Unerklärlicher Fehler!');
@@ -786,14 +853,14 @@ function pageSpeichern(e){
 function seiteAbbrechen(){
 $.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du brichst die Seiteneinstellung ab!", function(e) {
 	if(e == true){
-	hasChanged = false;
-	window.location.href = location.pathname+'&reload';
+	hasChanged = 0;
+	window.location.href = location.pathname+'!#reload';
 	}
 	});
 }
 
 function panelitemhinzufuegen(id){
-	hasChanged = true;
+	hasChanged = 14;
 	if($('#abdullahBoxBody_'+id+' > ul > li').length==1 && $('#abdullahBoxBody_'+id+' > ul > li').html()=='Panel hat keinen Item'){
 		$('#abdullahBoxBody_'+id+' > ul > li:first-child').remove();
 	}
@@ -809,7 +876,7 @@ if(c.length!=0){
 		$.post("/adm/interface/11", { tool:'ins', panel_id:i, name:c}).done(function(data) {
 			if(data>=1){
 			itemCurrentId = parseInt(data);
-			hasChanged = false;
+			hasChanged = 0;
 			$('#item_controller_'+a).replaceWith('<li class="list-group-item list-group-item-info" id="item_controller_'+itemCurrentId+'"><div class="row"><div class="col-md-6 col-sm-4"><div class="input-group"><span class="input-group-addon"><span class="glyphicon glyphicon-asterisk"></span></span><input type="text" class="form-control" id="item_name_'+itemCurrentId+'" placeholder="Bitte einen Item Namen angeben" value="'+c+'" aria-describedby="item_name"></div></div><div class="col-md-6 col-sm-8"><div class="btn-group btn-group-justified" role="group"><div class="btn-group" role="group" onclick="panelItemBearbeiten(\'Item bearbeiten: '+c+'\',\''+itemCurrentId+'\');"><button type="button" class="btn btn-default">Ansehen</button></div><div class="btn-group" role="group" onclick="panelItemSpeichern('+i+',\''+itemCurrentId+'\');"><button type="button" class="btn btn-success">Speichern</button></div><div class="btn-group" role="group" onclick="panelItemLoeschen('+i+',\''+itemCurrentId+'\');"><button type="button" class="btn btn-danger">Löschen</button></div></div></div></div></li>');
 			alertToast('success','Super !','Du hast erfolgreich einen Item zugefügt!');
 			}else{
@@ -819,14 +886,14 @@ if(c.length!=0){
 	}else{
 		$.post("/adm/interface/11", { tool:'upd', id:a , name : c}).done(function(data) {
 			if(data==1){
-			hasChanged = false;
+			hasChanged = 0;
 			alertToast('success', 'Super !', 'Du hast einen Item erfolgreich bearbeitet!');
 			}else{
 			alertToast('error', 'Fehler !', 'Unerklärlicher Fehler!');
 			}
 		});
 	}
-	hasChanged = false;
+	hasChanged = 0;
 }else{
 	alertToast('error','Fehler !','Du musst dem Item einen Namen geben!');
 }
@@ -835,7 +902,7 @@ function panelItemLoeschen(i, a){
 	$.confirmToast("<span class=\"hide\">"+$.now()+"</span>Du löschst einen Item!", function(e) {
 	if(e == true){
 	if(a.substr(0, 3)=='new'){
-		hasChanged = false;
+		hasChanged = 0;
 			$('#item_controller_'+a).remove();
 				if($('#abdullahBoxBody_'+i+' > ul > li').length==0){
 					$('#abdullahBoxBody_'+i+' > ul').append('<li class="list-group-item list-group-item-danger">Panel hat keinen Item</li>');
@@ -843,7 +910,7 @@ function panelItemLoeschen(i, a){
 	}else{
 		$.post("/adm/interface/11", { tool:'del', id:a}).done(function(data) {
 			if(data==1){
-			hasChanged = false;
+			hasChanged = 0;
 				$('#item_controller_'+a).remove();
 				if($('#abdullahBoxBody_'+i+' > ul > li').length==0){
 					$('#abdullahBoxBody_'+i+' > ul').append('<li class="list-group-item list-group-item-danger">Panel hat keinen Item</li>');
@@ -865,24 +932,33 @@ $.post("/adm/interface/12", { id:i}).done(function(data) {
 });
 }
 
+function mvcBearbeiten(i){
+$(".modal-title").html('MVC-Bearbeiten');
+$.post("/adm/interface/16", { id:i}).done(function(data) {
+	$(".modal-body").attr('abdullah',i).html(data);
+	$("#modalAlles").modal({"backdrop" :"static",show:!0});
+});
+}
+
+
 function modalReloadEditor(){
 	$('[data-toggle="popover"]').popover({ trigger: "hover" });
 $('[data-toggle="popover"]').on('click', function(e){e.preventDefault(); return false;});
-$('input, textarea').on( 'change', function( evts ) {hasChanged = true;});
+$('input, textarea').on( 'change', function( evts ) {hasChanged = 15;});
 
   $('#modalAlles .ckeditorGenerator').each(function(){
+	  $(this).fadeIn('fast');
 	var thisId = $(this).attr('abdullahValue');
-	$('#ckeditorFrame'+thisId).fadeIn('fast');
 	if(isMobile.any()){
 	$('#ckeditorFrame'+thisId).html('<div class="alert alert-danger" role="alert">Dieser Bereich ist nur mit einem Computer bearbeitbar!</div>');
 	} else {
-    var editorCKeditor = CKEDITOR.replace('ckeditor'+thisId,{skin:'office2013',allowedContent:true,contentsCss:[ '/css/bootstrap.min.css', '/css/style.css' ],
+    var editorCKeditor = CKEDITOR.replace('ckeditor'+thisId,{skin:'office2013',allowedContent:true,contentsCss:[ '/css/boostrap.min.css', '/css/style.css', '/css/ckeditor.css' ],
 			filebrowserBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html',
 			filebrowserImageBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html?type=Images',
 			filebrowserUploadUrl: '/adm/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files',
 			filebrowserImageUploadUrl: '/adm/plugins/ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Images'});
 	editorCKeditor.on( 'change', function( evt ) {
-		hasChanged = true;
+		hasChanged = 16;
    var textCKeditor = evt.editor.getData();
    $('#ckeditorInhalt'+thisId).val(textCKeditor);
 	});
@@ -892,19 +968,23 @@ $('input, textarea').on( 'change', function( evts ) {hasChanged = true;});
 	
 }
 $(document).ready(function(){
+
+
+
 $(document).on("click", "#btnModalSpeichern", function(event){
 	var id = $(".modal-body").attr('abdullah');
+	var sendPage = $("#modalAlles").attr('abdullah');
 	var bParameter = arrayParameterInhalt(".modal-body");
 	if(bParameter===null){
 		bParameter = 'noParameters';
 	}
-	$.post("/adm/interface/5", {itemId: id, parameterInhalt: bParameter}).done(function(data) {
+	$.post("/adm/interface/"+sendPage, {itemId: id, parameterInhalt: bParameter}).done(function(data) {
 	if(!$.isNumeric(data) && data !=0){
 			alertToast('success', 'Super !', 'Du hast erfolgreich die Parameters des Items bearbeitet!');
 			$('.modal-body').html(data);
 			$('#btnModalAbbrechen.btn.btn-danger').removeClass('btn-danger').addClass('btn-warning').html('Schießen');
 			modalReloadEditor();
-			hasChanged = false;
+			hasChanged = 0;
 	}
     });
 });
@@ -921,6 +1001,10 @@ $(document).on("click", "#btnModalAbbrechen", function(event){
 			$('#btnModalAbbrechen.btn').removeClass('btn-warning').addClass('btn-danger').html('Abbrechen');
 		}
 });
+
+
+
+
 	$('#modalAlles').on('hidden.bs.modal', function () {
 	$(".modal-title").html('');
 	$(".modal-body").removeAttr('abdullah').html('');

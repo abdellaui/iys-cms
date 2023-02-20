@@ -89,11 +89,15 @@ ErrorDocument 404 /index.php
   #RewriteCond %{HTTP_HOST} !^www\. [NC]
   #RewriteRule ^ http://www.%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
   #
+
+  RewriteCond %{HTTPS} !=on
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
   # To redirect all users to access the site WITHOUT the 'www.' prefix,
   # (http://www.example.com/... will be redirected to http://example.com/...)
   # uncomment the following:
    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
-   RewriteRule ^ http://%1%{REQUEST_URI} [L,R=301]
+   RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
 
   # Modify the RewriteBase if you are using Drupal in a subdirectory or in a
   # VirtualDocumentRoot and the rewrite rules are not working properly.
@@ -105,11 +109,12 @@ ErrorDocument 404 /index.php
   # uncomment the following line:
 	RewriteBase /
 	RewriteRule ^\?(.*)$ index.php?$1 [QSA,L]
-	RewriteRule ^(?!adm(\/|)|([0-9]+)@([0-9]+)/img/(.*)|css|(.*)\.html|fonts|img|js|browserconfig\.xml|cache\.manifest|favicon\.ico|manifest\.json|sitemap\.xml|urllist\.txt)(.*)$ index.php?seite=$0 [QSA,L]
+	RewriteRule ^(?!adm(\/|)|([0-9]+)@([0-9]+)/img/(.*)|css|interaktion/(.*)|(.*)\.html|fonts|img|js|browserconfig\.xml|cache\.manifest|favicon\.ico|manifest\.json|sitemap\.xml|phpinfo\.php|touch\.php|urllist\.txt)(.*)$ index.php?seite=$0 [QSA,L]
 	RewriteRule ^adm/dist/js/adminPanel.js(/|) ./adm/dist/js/adminPanel.php [NC,L]
 	RewriteRule ^adm/login(/|) ./adm/index.php?login=true [NC,L]
 	RewriteRule ^adm/startseite(/|) ./adm/index.php [NC,L]
 	RewriteRule ^adm/pagemanager(/|) ./adm/index.php?page=pagemanager [NC,L]
+  RewriteRule ^adm/pagegetpara(/|) ./adm/index.php?page=pagegetpara [NC,L]
 	RewriteRule ^adm/pageconfigmanager/(.*)$(/|)$ ./adm/index.php?page=pageconfigmanager&id=$1 [NC,L]
 	RewriteRule ^adm/boxcreate(/|) ./adm/index.php?page=boxcreate [NC,L]
 	RewriteRule ^adm/boxupdate/(.*)$(/|)$ ./adm/index.php?page=boxupdate&id=$1 [NC,L]
@@ -117,7 +122,7 @@ ErrorDocument 404 /index.php
 	RewriteRule ^adm/panelupdate/(.*)$(/|)$ ./adm/index.php?page=panelupdate&id=$1 [NC,L]
 	RewriteRule ^adm/parameteredit/(.*)$(/|)$ ./adm/index.php?page=parameteredit&id=$1 [NC,L]
 	RewriteRule ^adm/interface/(.*)$(/|)$ ./adm/php/interface.php?id=$1 [NC,L]
-
+	RewriteRule ^interaktion/(.*)$(/|)$ ./adm/php/automobile.php?page=$1 [NC,L]
 	RewriteRule ^([0-9]+)@([0-9]+)/img/(.*)$(/|)$ ./img/thumb.php?src=./$3&size=$1x$2 [NC,L]
 
 ### BOOST START ### Changed 
@@ -159,7 +164,7 @@ ErrorDocument 404 /index.php
 
   # Rules to correctly serve gzip compressed CSS and JS files.
   # Requires both mod_rewrite and mod_headers to be enabled.
-  
+</IfModule>
   
     # Enable GZIP
 <ifmodule mod_deflate.c>
@@ -217,5 +222,3 @@ BrowserMatch \bMSIE !no-gzip !gzip-only-text/html
   </FilesMatch>
   </IfModule>
   
-
-</IfModule>

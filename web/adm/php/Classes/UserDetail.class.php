@@ -30,5 +30,9 @@ class UserDetail{
 				return "Neue E-Mail muss mindestens 5 Zeichen beinhalten!";
 			}
 	}
+	
+	public function modusAendern($neue){
+				return ($this->Connection->query("UPDATE admin SET admin_mode = :neueModus WHERE id = :userID LIMIT 1;", array("userID"=>$this->id,"neueModus"=>$neue)));
+	}
 }
 ?>

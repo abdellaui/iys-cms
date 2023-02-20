@@ -66,11 +66,21 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
 					$activeLinkStartseite = '';
 					}?>
 			<li<?php echo $activeLinkStartseite; ?>><a href="/adm/pagemanager"><i class="fa fa-map"></i> <span>Seiten bearbeiten</span></a></li>
-			<?php if(isset($_GET['page']) && $_GET['page']=='pageconfigmanager' && isset($_GET['id'])){
-					$activeLinkConfig = ' active';
+			<?php 
+			if($userdata['admin_mode']){
+				
+					if(isset($_GET['page']) && $_GET['page']=='pageconfigmanager' && isset($_GET['id'])){
+						$activeLinkConfig = ' active';
 					}else{
-					$activeLinkConfig = '';
-					}?>
+						$activeLinkConfig = '';
+					}
+					if(isset($_GET['page']) && $_GET['page']=='pagegetpara'){
+						$activeLinkGets = ' class="active"';
+					}else{
+						$activeLinkGets = '';
+					}
+		?>
+			<li<?php echo $activeLinkGets; ?>><a href="/adm/pagegetpara"><i class="fa fa-code-fork"></i> <span>MVC Parameter</span></a></li>
 			<li class="treeview<?php echo $activeLinkConfig; ?>">
               <a href="#"><i class="fa fa-gear"></i> <span>Konfiguration</span> <i class="fa fa-angle-left pull-right"></i></a>
               <ul class="treeview-menu">
@@ -81,6 +91,7 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
 				<li><a href="/adm/pageconfigmanager/5">urllist.txt</a></li>
 				<li><a href="/adm/pageconfigmanager/6">manifest.json</a></li>
 				<li><a href="/adm/pageconfigmanager/7">browserconfig.xml</a></li>
+				<li><a href="/adm/pageconfigmanager/8">map.js</a></li>
               </ul>
             </li>
             <li class="header">BOXEN</li>
@@ -104,6 +115,9 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
 				<?php
 				$c = new PanelListe(2);
 				echo $c;
+				
+				} // Ende Expertenmodus
+				
 				$d = new ParameterListe(1);
 				echo $d;
 				?>
@@ -118,6 +132,8 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
 	   if(isset($_GET['page']) && $_GET['page']!='startseite'){
 		if($_GET['page']=='pagemanager'){
 			 require("editPage.php");
+		}if($_GET['page']=='pagegetpara'){
+			 require("editMVCVariabel.php");
 		}elseif($_GET['page']=='pageconfigmanager' && isset($_GET['id'])){
 			require("editPageConfig.php");
 		}elseif($_GET['page']=='boxcreate'){
@@ -144,7 +160,7 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
           IYS-CMS by Abdullah Sahin
         </div>
 
-        <strong>Copyright &copy; 2016 <a href="/#">Carmix</a>.</strong> All rights reserved.
+        <strong>Copyright &copy; 2016 <a href="/#">Abdullah Sahin</a>.</strong> All rights reserved.
       </footer>
   <aside class="control-sidebar control-sidebar-dark">
     <!-- Create the tabs -->
@@ -189,6 +205,13 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
 			  <input class="form-control" placeholder="E-Mail" aria-describedby="sizing-addon1" id="einstellung_email" type="text">
             </label>
 			<div class="btn btn-success col-md-12 col-sm-12 col-xs-12" id="einstellung_email_aendern">E-Mail ändern</div>
+			<br>
+		<h3 class="control-sidebar-heading">Modus ändern</h3>
+			<label class="control-sidebar-subheading">
+			  <input id="einstellung_modus" type="checkbox" <?php echo ($userdata['admin_mode'])?'checked=checked':'';?>>
+              Expertenmodus
+            </label>
+			<!--<div class="btn btn-success col-md-12 col-sm-12 col-xs-12" id="einstellung_modus_aendern">E-Mail ändern</div>-->
       </div>
     </div>
   </aside>

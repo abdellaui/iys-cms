@@ -1,4 +1,8 @@
 <?php
+
+require(__DIR__ . "./../../../secrets.php");
+
+
 class Connection
 {
     private $pdo;
@@ -17,10 +21,10 @@ class Connection
     
     private function Connect()
     {
-        $this->settings["host"]     = 'localhost';
-		$this->settings["dbname"]   = 'iys_cms';
-		$this->settings["user"]     = 'root';
-		$this->settings["password"] = 'password';
+        $this->settings["host"] = DB_HOST;
+		$this->settings["dbname"] = DB_NAME;
+		$this->settings["user"] =  DB_USERNAME;
+		$this->settings["password"] = DB_PASSWORD;
 		
         $dsn            = 'mysql:dbname=' . $this->settings["dbname"] . ';host=' . $this->settings["host"] . '';
         try {
@@ -173,6 +177,7 @@ class Connection
         
         if (!empty($sql)) {
             $message .= "\r\nRaw SQL : " . $sql;
+            $message .="\r\nRaw Parameters : ".json_encode($this->parameters);
         }
         $this->logs->write($message);
         

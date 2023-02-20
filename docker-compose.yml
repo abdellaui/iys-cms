@@ -2,42 +2,63 @@ version: "3"
 
 services:
   webserver:
-    build: 
-      context: ./bin/webserver
-    restart: 'always'
+    build:
+      context: ./bin/php8
+    container_name: "cms-davinci-consulting-php8"
+    restart: "always"
     ports:
-      - "80:80"
+      - "81:80"
       - "443:443"
     links:
-      - mysql
-    volumes: 
-      - ${DOCUMENT_ROOT-./web}:/var/www/html
-      - ${PHP_INI-./config/php/php.ini}:/usr/local/etc/php/php.ini
-      - ${VHOSTS_DIR-./config/vhosts}:/etc/apache2/sites-enabled
-      - ${LOG_DIR-./logs/apache2}:/var/log/apache2
-  mysql:
-    image: mariadb:10.3.22
-    restart: 'always'
+      - database
+    volumes:
+      - ./web:/var/www/html
+      - ./config/php/php.ini:/usr/local/etc/php/php.ini
+      - ./config/vhosts:/etc/apache2/sites-enabled
+      - ./logs/apache2:/var/log/apache2
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html
+      PMA_PORT: 8080
+      MYSQL_ROOT_PASSWORD: password
+  database:
+    build:
+      context: "./bin/mariadb103"
+    container_name: "cms-davinci-consulting-mariadb103"
+    restart: "always"
     ports:
-      - "3306:3306"
-    volumes: 
-      - ${MYSQL_DATA_DIR-./data/mysql}:/var/lib/mysql
-      - ${MYSQL_LOG_DIR-./logs/mysql}:/var/log/mysql
-      - ${DOCUMENT_ROOT-./dump}:/docker-entrypoint-initdb.d
+      - "127.0.0.1:3306:3306"
+    volumes:
+      - ./config/initdb:/docker-entrypoint-initdb.d
+      - ./data/mysql:/var/lib/mysql
+      - ./logs/mysql:/var/log/mysql
     environment:
       MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: iys_cms
+      MYSQL_USER: iys_cms
+      MYSQL_PASSWORD: password
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    container_name: "cms-davinci-consulting-phpmyadmin"
     links:
-      - mysql
+      - database
     environment:
-      PMA_HOST: mysql
+      PMA_HOST: database
       PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: password
+      PMA_VERBOSE: ""
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: iys_cms
+      MYSQL_PASSWORD: password
+      UPLOAD_LIMIT: 1G
+      MEMORY_LIMIT: 1G
     ports:
-      - '8080:80'
-    volumes: 
+      - "8080:80"
+    volumes:
       - /sessions
+      - ./config/php/php.ini:/usr/local/etc/php/conf.d/php-phpmyadmin.ini
   redis:
+    container_name: "cms-davinci-consulting-redis"
     image: redis:latest
     ports:
-      - "6379:6379"
+      - "127.0.0.1:6379:6379"
