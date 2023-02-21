@@ -2,10 +2,10 @@
 -- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: database:3306
--- Generation Time: Feb 21, 2023 at 12:39 AM
--- Server version: 10.3.37-MariaDB-1:10.3.37+maria~ubu2004
--- PHP Version: 8.0.19
+-- Host: localhost
+-- Generation Time: Feb 21, 2023 at 02:29 AM
+-- Server version: 5.7.36
+-- PHP Version: 8.1.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `iys_cms`
+-- Database: `usr_web143_3`
 --
 
 -- --------------------------------------------------------
@@ -29,11 +29,11 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `mail` varchar(255) NOT NULL,
-  `bild` varchar(255) NOT NULL,
-  `psw` varchar(255) NOT NULL,
-  `ip` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `mail` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `bild` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `psw` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `ip` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `last_login` datetime NOT NULL,
   `admin_mode` int(2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -43,7 +43,7 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`id`, `name`, `mail`, `bild`, `psw`, `ip`, `last_login`, `admin_mode`) VALUES
-(1, 'Administrator', 'admin@davinci-consulting.net', '/adm/dist/img/avatar5.png', 'da5fc7e08d41300619a4788ee201eaf2', '192.168.144.1', '2023-02-21 00:01:26', 1);
+(1, 'Administrator', 'admin@davinci-consulting.net', '/adm/dist/img/avatar5.png', 'da5fc7e08d41300619a4788ee201eaf2', '2003:e4:af07:267c:992c:2266:58d9:5e02', '2023-02-21 02:12:04', 1);
 
 -- --------------------------------------------------------
 
@@ -53,8 +53,8 @@ INSERT INTO `admin` (`id`, `name`, `mail`, `bild`, `psw`, `ip`, `last_login`, `a
 
 CREATE TABLE `boxes` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `source` text NOT NULL
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `source` text COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `boxes` (
 INSERT INTO `boxes` (`id`, `name`, `source`) VALUES
 (1, 'Box.Head', '    &lt;meta charset=\"utf-8\"&gt;\n    &lt;meta http-equiv=\"X-UA-Compatible\" content=\"IE=edge\"&gt;\n	&lt;meta http-equiv=\"content-language\" content=\"de\"&gt;\n	&lt;meta http-equiv=\"cache-control\" content=\"cache\"&gt;\n    &lt;meta name=\"robots\" content=\"index, follow, noodp, noydir\"&gt;\n	&lt;title&gt;{{$_GET::title}}&lt;/title&gt;\n	&lt;meta name=\"author\" content=\"{{author}}\"&gt;\n	&lt;meta name=\"publisher\" content=\"www.{{domain}}\"&gt;\n	&lt;meta name=\"copyright\" content=\"2016 (c) {{$_GET::title}}\"&gt;\n	&lt;meta name=\"date\" content=\"2016-24-08\"&gt;\n	&lt;meta name=\"keywords\" content=\"{{keywords}}\" lang=\"de\"&gt;\n	&lt;meta name=\"description\" content=\"{{$_GET::beschreibung}}\"&gt;\n	&lt;meta name=\"abstract\" lang=\"de\" content=\"{{abstraktebeschreibung}}\"&gt;\n	&lt;meta name=\"page-topic\" lang=\"de\" content=\"{{thema}}\"&gt;\n	&lt;meta name=\"page-type\" lang=\"de\" content=\"{{thematype}}\"&gt;\n	&lt;meta name=\"audience\" lang=\"de\" content=\"{{zielgruppe}}\"&gt;\n	&lt;meta name=\"distribution\" content=\"global\"&gt;\n	&lt;meta property=\"og:type\" content=\"website\"&gt;\n	&lt;meta property=\"og:site_name\" content=\"{{$_GET::title}}\"&gt;\n	&lt;meta property=\"og:title\" content=\"{{$_GET::title}}\"&gt;\n	&lt;meta property=\"og:description\" content=\"{{$_GET::beschreibung}}\"&gt;\n	&lt;meta property=\"og:url\" content=\"https://{{domain}}/\"&gt;\n	&lt;meta property=\"og:image\" content=\"/img/icons/grossesIcon.png\"&gt;\n	&lt;meta property=\"og:image:height\" content=\"628\"&gt;\n	&lt;meta property=\"og:image:width\" content=\"959\"&gt;\n	&lt;meta name=\"twitter:card\" content=\"summary_large_image\"&gt;\n	&lt;meta name=\"twitter:title\" content=\"{{$_GET::title}}\"&gt;\n	&lt;meta name=\"twitter:description\" content=\"{{$_GET::beschreibung}}\"&gt;\n	&lt;meta name=\"twitter:image\" content=\"/img/icons/grossesIcon.png\"&gt;\n	&lt;!--&lt;meta name=\"twitter:site\" content=\"@sahin.cloud_iysCms\"&gt;--&gt;\n	&lt;meta itemprop=\"name\" content=\"{{$_GET::title}}\"&gt;\n	&lt;meta itemprop=\"description\" content=\"{{$_GET::beschreibung}}\"&gt;\n	&lt;meta itemprop=\"image\" content=\"/img/icons/grossesIcon.png\"&gt;\n	&lt;meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,shrink-to-fit=no\"&gt;\n	&lt;meta name=\"theme-color\" content=\"#000000\"&gt;\n	&lt;meta name=\"application-name\" content=\"{{$_GET::title}}\" /&gt;\n	&lt;meta name=\"apple-mobile-web-app-title\" content=\"{{$_GET::title}}\"&gt;\n	&lt;meta name=\"apple-mobile-web-app-capable\" content=\"yes\"&gt;\n	&lt;meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\"&gt;\n	&lt;meta name=\"msapplication-TileColor\" content=\"#000000\"&gt;\n	&lt;meta name=\"msapplication-TileImage\" content=\"/img/icons/icon-144x144-precomposed.png\"&gt;\n	&lt;meta name=\"msapplication-config\" content=\"/browserconfig.xml\"&gt;\n	&lt;meta name=\"msapplication-task\" content=\"name={{$_GET::title}};action-uri=https://{{domain}}/;icon-uri=https://{{domain}}/favicon.ico\" /&gt;\n	&lt;meta name=\"msapplication-navbutton-color\" content=\"#000000\"&gt;\n	&lt;meta name=\"generator\" content=\"Abdullah Sahin\"&gt;\n	&lt;link rev=\"made\" href=\"mailto:abdullah@sahin.de\"&gt;\n	&lt;link rel=\"manifest\" href=\"/manifest.json\"&gt;\n	&lt;link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\"&gt;\n	&lt;link rel=\"apple-touch-icon\" href=\"/img/icons/apple/apple196.png\"&gt;\n	&lt;link rel=\"apple-touch-icon-precomposed\" sizes=\"57x57\" href=\"/img/icons/apple/apple57.png\"&gt;\n	&lt;link rel=\"apple-touch-icon-precomposed\" sizes=\"72x72\" href=\"/img/icons/apple/apple72.png\"&gt;\n	&lt;link rel=\"apple-touch-icon-precomposed\" sizes=\"114x114\" href=\"/img/icons/apple/apple114.png\"&gt;\n	&lt;link rel=\"apple-touch-icon-precomposed\" href=\"/img/icons/apple/apple64.png\"&gt;\n	&lt;link rel=\"apple-touch-startup-image\" sizes=\"320x460\" href=\"/img/icons/apple/homescreen/apple-touch-startup-image-320x460.png\" media=\"(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)\"&gt;\n	&lt;link rel=\"apple-touch-startup-image\" sizes=\"640x920\" href=\"/img/icons/apple/homescreen/apple-touch-startup-image-640x920.png\" media=\"(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)\"&gt;\n	&lt;link rel=\"apple-touch-startup-image\" sizes=\"640x1096\" href=\"/img/icons/apple/homescreen/apple-touch-startup-image-640x1096.png\" media=\"(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)\"&gt;\n	&lt;link rel=\"apple-touch-startup-image\" sizes=\"768x1004\" href=\"/img/icons/apple/homescreen/apple-touch-startup-image-768x1004.png\" media=\"(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 1)\"&gt;\n	&lt;link rel=\"apple-touch-startup-image\" sizes=\"748x1024\" href=\"/img/icons/apple/homescreen/apple-touch-startup-image-748x1024.png\" media=\"(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 1)\"&gt;\n	&lt;link rel=\"apple-touch-startup-image\" sizes=\"1536x2008\" href=\"/img/icons/apple/homescreen/apple-touch-startup-image-1536x2008.png\" media=\"(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)\"&gt;\n	&lt;link rel=\"apple-touch-startup-image\" sizes=\"1496x2048\" href=\"/img/icons/apple/homescreen/apple-touch-startup-image-1496x2048.png\" media=\"(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)\"&gt;\n	&lt;link rel=\"shortcut icon\" sizes=\"196x196\" href=\"/img/icons/icon-196x196-precomposed.png\"&gt;\n	&lt;link rel=\"shortcut icon\" type=\"image/x-icon\" href=\"/favicon.ico\"&gt;\n	&lt;link rel=\"stylesheet\" href=\"/css/bootstrap.min.css\"&gt;	&lt;link rel=\"stylesheet\" href=\"/css/font-awesome.min.css\"&gt;\n	&lt;link rel=\"stylesheet\" href=\"/css/style.css\"&gt;\n	&lt;!--[if lt IE 9]&gt;\n      &lt;script src=\"https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js\"&gt;&lt;/script&gt;\n      &lt;script src=\"https://oss.maxcdn.com/respond/1.4.2/respond.min.js\"&gt;&lt;/script&gt;\n	  code.jquery.com/ui/1.11.3/jquery-ui.min.js\n    &lt;![endif]--&gt;\n	&lt;script src=\"/js/jquery.min.js\"&gt;&lt;/script&gt;\n	&lt;script src=\"/js/modernizr-2.7.2.min.js\"&gt;&lt;/script&gt;\n'),
 (2, 'Box.Body_Startseite', '&lt;div class=\"background\"&gt;&lt;/div&gt;\n{{box.header}}\n{{box.navigator}}\n	\n &lt;div class=\"container-fluid\"&gt;\n &lt;div class=\"container containeriysCms\"&gt;\n	&lt;div class=\"row rowPad\"&gt;\n		&lt;div class=\"col-md-10 col-md-offset-1\"&gt;\n				&lt;div class=\"row\"&gt;\n					&lt;div class=\"col-md-12\"&gt;\n							&lt;hr class=\"iysCmsAutoHaendler\"&gt;\n							&lt;h1 class=\"iysCmsAutoHaendlerText\"&gt;{{ueberschrift1}}&lt;/h1&gt;\n							&lt;hr class=\"iysCmsAutoHaendler\"&gt;\n						{{inhalt}}\n					&lt;/div&gt;\n				&lt;/div&gt;\n				&lt;div class=\"row\"&gt;\n				{{panel.startseite.info}}\n				&lt;/div&gt;\n		  		&lt;!-- START: remove me if not automobile page --&gt;\n				&lt;div class=\"row\"&gt;\n					&lt;div class=\"col-md-12\"&gt;\n							&lt;hr class=\"iysCmsAutoHaendler\"&gt;\n							&lt;h1 class=\"iysCmsAutoHaendlerText\"&gt;{{ueberschrift2}}&lt;/h1&gt;\n							&lt;hr class=\"iysCmsAutoHaendler\"&gt;\n						{{includescript}}\n					  &lt;br&gt;\n					  &lt;br&gt;\n					  &lt;br&gt;\n					  &lt;br&gt;\n					&lt;/div&gt;\n				&lt;/div&gt;\n		  		&lt;!-- END: remove me if not automobile page --&gt;\n &lt;/div&gt;\n\n&lt;/div&gt;\n{{box.bigfooter}}\n&lt;/div&gt;\n{{box.footer}}\n&lt;/div&gt;\n &lt;script src=\"/js/bootstrap.min.js\"&gt;&lt;/script&gt;\n &lt;script src=\"/js/javascript.js\"&gt;&lt;/script&gt;\n&lt;script src=\"/js/modernizr-2.7.2.min.js\"&gt;&lt;/script&gt;'),
-(3, 'Box.Header', '&lt;div class=\"site-wrapper\"&gt;\n\n      &lt;div class=\"site-wrapper-inner\"&gt;\n		&lt;div class=\"iysCmsCoverHold\"&gt;\n	  		&lt;div class=\"iysCmsCover\" style=\"background-image:url({{img.banner.url}});\"&gt;&lt;/div&gt;\n		&lt;/div&gt;\n	  &lt;div class=\"iysCmsCoverHR\"&gt;&lt;/div&gt;\n        &lt;div class=\"cover-container\"&gt;\n          &lt;div class=\"inner \"&gt;\n			    &lt;div class=\"row\" style=\"width:100%; filter: drop-shadow(1px 1px 0px rgba(255, 255, 255, 0.7)) drop-shadow(-1px -1px 0px rgba(255, 255, 255, 0.9)) drop-shadow(-1px 1px 0px rgba(255, 255, 255, 0.9)) drop-shadow(1px -1px 0px rgba(255, 255, 255, 0.9));\"&gt;\n        &lt;tr&gt;\n            &lt;div class=\"col-md-4\" style=\"line-height:250px;height:250px;\"&gt;&lt;p style=\"vertical-align: middle;line-height: 1.5;display: inline-block;\"&gt;{{company.name}}&lt;/p&gt;&lt;/div&gt;\n            &lt;div class=\"col-md-4\" style=\"line-height:250px;height:250px;text-align:center\"&gt;&lt;figure style=\"vertical-align: middle;line-height: 1.5;display: inline-block;\"&gt;\n		 			&lt;img src=\"{{img.logo.url}}\" alt=\"{{img.logo.text}}\" class=\"img-responsive center-block\" style=\"max-heigth:250px\"&gt;\n		 &lt;/figure&gt;&lt;/div&gt;\n		  &lt;div class=\"col-md-4\" style=\"line-height:250px;height:250px;\"&gt;&lt;p style=\"vertical-align: middle;line-height: 1.5;display: inline-block;\"&gt;{{company.description}}&lt;/p&gt;&lt;/div&gt;\n    &lt;/div&gt;\n			\n			\n          &lt;/div&gt;\n\n\n        &lt;/div&gt;\n\n      &lt;/div&gt;\n\n    &lt;/div&gt;'),
+(3, 'Box.Header', '&lt;div class=\"site-wrapper\"&gt;\n\n      &lt;div class=\"site-wrapper-inner\"&gt;\n		&lt;div class=\"iysCmsCoverHold\"&gt;\n	  		&lt;div class=\"iysCmsCover\" style=\"background-image:url({{img.banner.url}});\"&gt;&lt;/div&gt;\n		&lt;/div&gt;\n	  &lt;div class=\"iysCmsCoverHR\"&gt;&lt;/div&gt;\n        &lt;div class=\"cover-container\"&gt;\n          &lt;div class=\"inner \"&gt;\n			    &lt;div class=\"row headerScreen\"&gt;\n        &lt;tr&gt;\n            &lt;div class=\"col-md-4 headerColumn\"&gt;&lt;div class=\"headerContent\"&gt;{{company.name}}&lt;/div&gt;&lt;/div&gt;\n            &lt;div class=\"col-md-4 headerColumn\"&gt;&lt;figure class=\"headerContent\"&gt;\n		 			&lt;img src=\"{{img.logo.url}}\" alt=\"{{img.logo.text}}\" class=\"img-responsive center-block\" style=\"max-heigth:250px\"&gt;\n		 &lt;/figure&gt;&lt;/div&gt;\n		  &lt;div class=\"col-md-4 headerColumn\"&gt;&lt;div class=\"headerContent\"&gt;{{company.description}}&lt;/div&gt;&lt;/div&gt;\n    &lt;/div&gt;\n			\n			\n          &lt;/div&gt;\n\n\n        &lt;/div&gt;\n\n      &lt;/div&gt;\n\n    &lt;/div&gt;'),
 (4, 'Box.Navigation', '&lt;nav id=\"iysCmsMenu\" class=\"navbar navbar-default navbar-static-top\"&gt;\n      &lt;div class=\"container\"&gt;\n        &lt;div class=\"navbar-header\"&gt;\n          &lt;button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbar\" aria-expanded=\"false\" aria-controls=\"navbar\"&gt;\n            &lt;span class=\"sr-only\"&gt;Menü&lt;/span&gt;\n            &lt;span class=\"icon-bar\"&gt;&lt;/span&gt;\n            &lt;span class=\"icon-bar\"&gt;&lt;/span&gt;\n            &lt;span class=\"icon-bar\"&gt;&lt;/span&gt;\n          &lt;/button&gt;\n        &lt;/div&gt;\n        &lt;div id=\"navbar\" class=\"navbar-collapse collapse\"&gt;\n          &lt;ul class=\"nav navbar-nav\"&gt;\n				{{panel.menulink}}\n          &lt;/ul&gt;\n        &lt;/div&gt;\n      &lt;/div&gt;\n    &lt;/nav&gt;\n&lt;nav id=\"iysCmsMenuFixed\" class=\"navbar navbar-default navbar-fixed-top\"&gt;\n      &lt;div class=\"container\"&gt;\n        &lt;div class=\"navbar-header\"&gt;\n          &lt;button type=\"button\" class=\"navbar-toggle collapsed\" data-toggle=\"collapse\" data-target=\"#navbarFix\" aria-expanded=\"false\" aria-controls=\"navbar\"&gt;\n            &lt;span class=\"sr-only\"&gt;Menü&lt;/span&gt;\n            &lt;span class=\"icon-bar\"&gt;&lt;/span&gt;\n            &lt;span class=\"icon-bar\"&gt;&lt;/span&gt;\n            &lt;span class=\"icon-bar\"&gt;&lt;/span&gt;\n          &lt;/button&gt;\n          &lt;div class=\"navbar-brand\"&gt;&lt;img src=\"{{menueIcon}}\" alt=\"sahin.cloud iysCms\"&gt;&lt;/div&gt;\n        &lt;/div&gt;\n        &lt;div id=\"navbarFix\" class=\"navbar-collapse collapse\"&gt;\n          &lt;ul class=\"nav navbar-nav\"&gt;\n{{panel.menulink}}\n          &lt;/ul&gt;\n        &lt;/div&gt;\n      &lt;/div&gt;\n    &lt;/nav&gt;'),
 (5, 'Box.BigFooter', '&lt;div class=\"row\"&gt;\n&lt;div class=\"col-md-12 bigFooteriysCms\"&gt;\n	&lt;div class=\"row rowPad\"&gt;\n		&lt;div class=\"col-md-10 col-md-offset-1\"&gt;\n		&lt;div class=\"row\"&gt;\n		&lt;div class=\"col-md-4\"&gt;\n			&lt;div class=\"row iysCmsMainInfo\"&gt;\n					&lt;div class=\"col-md-12\"&gt;\n					&lt;h3 class=\"iysCmsUeberschrift\"&gt;Kontakt&lt;/h3&gt;\n					&lt;/div&gt;\n					&lt;div class=\"col-md-12\"&gt;\n					&lt;h3&gt;&lt;span class=\"glyphicon glyphicon-home\"&gt;&lt;/span&gt; &lt;a href=\"{{routeplaner.link}}\" target=\"_blank\"&gt;{{adresse}}&lt;/a&gt;&lt;/h3&gt;\n					&lt;/div&gt;\n					&lt;div class=\"col-md-12\"&gt;\n					&lt;h3&gt;&lt;span class=\"fa fa-phone\"&gt;&lt;/span&gt; &lt;a href=\"tel:{{telefonnummer}}\"&gt;{{telefonnummer}}&lt;/a&gt;&lt;/h3&gt;\n					&lt;/div&gt;\n					&lt;div class=\"col-md-12\"&gt;\n					&lt;h3&gt;&lt;span class=\"glyphicon glyphicon-envelope\"&gt;&lt;/span&gt; &lt;a href=\"mailto:{{mailadresse}}\"&gt;{{mailadresse}}&lt;/a&gt;&lt;/h3&gt;\n					&lt;/div&gt;\n\n			&lt;/div&gt;\n		&lt;/div&gt;\n				&lt;div class=\"col-md-4\"&gt;\n			&lt;div class=\"row iysCmsMainInfo\"&gt;\n					&lt;div class=\"col-md-12\"&gt;\n					&lt;h3 class=\"iysCmsUeberschrift\"&gt;Sitemap&lt;/h3&gt;\n					&lt;/div&gt;\n					{{panel.sitemap}}\n			&lt;/div&gt;\n		&lt;/div&gt;\n						&lt;div class=\"col-md-4\"&gt;\n		&lt;div class=\"row iysCmsMainInfo\"&gt;\n					&lt;div class=\"col-md-12\"&gt;\n					&lt;h3 class=\"iysCmsUeberschrift\"&gt;Öffnungszeiten&lt;/h3&gt;\n					&lt;/div&gt;\n					&lt;div class=\"col-md-12\"&gt;\n					{{panel.oeffnungzeiten}}\n		  &lt;/div&gt;\n		&lt;/div&gt;			\n		&lt;/div&gt;\n		&lt;/div&gt;\n		&lt;/div&gt;\n		&lt;/div&gt;\n&lt;/div&gt;\n&lt;/div&gt;'),
 (6, 'Box.Footer', '&lt;div class=\"row\"&gt;\n     &lt;footer class=\"iysCmsFooter\"&gt;\n		&lt;div class=\"container\"&gt;\n			 &lt;div class=\"row\"&gt;\n				&lt;div class=\"col-md-12\"&gt;\n				&lt;p class=\"iysCmsCopy\"&gt;\n					&amp;copy; Copyright by {{seiten.name}}\n				&lt;/p&gt;\n				&lt;p class=\"pull-right\"&gt;\n&lt;a id=\"scrollToMainC\" class=\"btn btn-default btnSocial\" data-title=\"Zurück zur Anfang\" data-placement=\"top\" data-toggle=\"tooltip\"&gt;&lt;span class=\"glyphicon glyphicon-chevron-up\"&gt;&lt;/span&gt;&lt;/a&gt;\n				&lt;/p&gt;\n&lt;div class=\"hidden\" itemscope=\"itemscope\" itemtype=\"http://schema.org/LocalBusiness\"&gt;\n               &lt;span itemprop=\"name\"&gt;{{seiten.name}}&lt;/span&gt;\n                &lt;div itemprop=\"aggregateRating\" itemscope=\"itemscope\" itemtype=\"http://schema.org/AggregateRating\"&gt;        \n                    &lt;div class=\"num\"&gt;\n                        &lt;span class=\"rating\" id=\"companyRating\" itemprop=\"ratingValue\"&gt;5.0&lt;/span&gt;\n                    &lt;/div&gt;\n                    &lt;div&gt;Grade&lt;/div&gt;\n                    &lt;div class=\"num\"&gt;\n                         &lt;span class=\"count\" id=\"companyCount\" itemprop=\"reviewCount\"&gt;\n                              100\n                         &lt;/span&gt;\n                    &lt;/div&gt;\n                &lt;/div&gt;\n            &lt;/div&gt;\n				&lt;/div&gt;\n			&lt;/div&gt;\n		&lt;/div&gt;\n    &lt;/footer&gt;\n&lt;/div&gt;'),
@@ -84,7 +84,7 @@ INSERT INTO `boxes` (`id`, `name`, `source`) VALUES
 
 CREATE TABLE `mvc_parameter` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `type` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -105,7 +105,7 @@ INSERT INTO `mvc_parameter` (`id`, `name`, `type`) VALUES
 CREATE TABLE `mvc_parameterinhalt` (
   `id` int(11) NOT NULL,
   `pageid` int(11) NOT NULL,
-  `wert` text NOT NULL,
+  `wert` text COLLATE utf8_unicode_ci NOT NULL,
   `parentid` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -137,7 +137,7 @@ INSERT INTO `mvc_parameterinhalt` (`id`, `pageid`, `wert`, `parentid`) VALUES
 
 CREATE TABLE `panels` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `source` text CHARACTER SET utf32 COLLATE utf32_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -161,8 +161,8 @@ INSERT INTO `panels` (`id`, `name`, `source`) VALUES
 
 CREATE TABLE `parameter` (
   `id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL,
-  `type` varchar(255) NOT NULL,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `type` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `fremdid` int(11) NOT NULL,
   `sorte` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -263,7 +263,7 @@ CREATE TABLE `parameterinhalt` (
   `type` int(11) NOT NULL,
   `sorte` int(11) NOT NULL,
   `fremdid` int(11) NOT NULL,
-  `wert` text NOT NULL
+  `wert` text COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -310,7 +310,7 @@ INSERT INTO `parameterinhalt` (`id`, `paraid`, `parentid`, `type`, `sorte`, `fre
 (45, 17, 18, 1, 2, 1, 'Finanzierung / Inzahlungnahme'),
 (46, 16, 19, 1, 2, 1, 'tachometer'),
 (47, 17, 19, 1, 2, 1, 'Garantierte Kilometerlaufleistung'),
-(48, 43, 43, 1, 1, 2, '<?php include($_SERVER[DOCUMENT_ROOT].\'/adm/php/inseratAPI/api.php\');?> <br><br><hr>'),
+(48, 43, 43, 1, 1, 2, '<?php include(\'/adm/php/inseratAPI/api.php\');?> <br><br><hr>'),
 (50, 26, 12, 1, 2, 3, '/startseite'),
 (51, 27, 12, 1, 2, 3, 'Startseite'),
 (52, 26, 13, 1, 2, 3, '/fahrzeuge'),
@@ -338,7 +338,7 @@ INSERT INTO `parameterinhalt` (`id`, `paraid`, `parentid`, `type`, `sorte`, `fre
 (77, 63, 63, 3, 1, 9, 'Borsigstraße 7\n&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;40880 Ratingen'),
 (78, 64, 64, 1, 1, 9, '+49 234 60 29 182'),
 (79, 65, 65, 1, 1, 9, 'admin@davinci-consulting.net'),
-(80, 50, 50, 1, 1, 7, '<?php include($_SERVER[DOCUMENT_ROOT].\'/adm/php/inseratAPI/api.php\');?>'),
+(80, 50, 50, 1, 1, 7, '<?php include(\'/adm/php/inseratAPI/api.php\');?>'),
 (81, 37, 24, 1, 2, 4, '/standort'),
 (82, 38, 24, 1, 2, 4, 'Standort'),
 (83, 26, 25, 1, 2, 3, '/standort'),
@@ -373,7 +373,7 @@ INSERT INTO `parameterinhalt` (`id`, `paraid`, `parentid`, `type`, `sorte`, `fre
 CREATE TABLE `parameterpanelitem` (
   `id` int(11) NOT NULL,
   `panel_id` int(11) NOT NULL,
-  `name` varchar(255) NOT NULL
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
@@ -420,8 +420,8 @@ INSERT INTO `parameterpanelitem` (`id`, `panel_id`, `name`) VALUES
 
 CREATE TABLE `seiten` (
   `id` int(11) NOT NULL,
-  `urls` varchar(255) NOT NULL,
-  `names` varchar(255) NOT NULL,
+  `urls` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `names` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `headtag` int(11) NOT NULL,
   `bodytag` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
