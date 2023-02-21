@@ -27,7 +27,7 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
   <body class="hold-transition skin-black sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
-        <a href="/adm/startseite" class="logo">
+        <a href="/" class="logo">
           <span class="logo-mini"><b>I</b>CMS</span>
           <span class="logo-lg"><b>IYS</b>-CMS</span>
         </a>

@@ -82,10 +82,10 @@ class GenerateForm{
 		}
 	}elseif($typFirst==4){
 		if($this->hatEinWert($id, $fremdid, $parentid)){
-		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="100" cols="80">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea>';
+		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="30" cols="80">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea>';
 		$return .= '<div class="hidden" paraarbeit="update" parasuche="html" paranick="ckeditorInhalt" paraid="'.$id.'" parafremdid="'.$fremdid.'" paratype="'.$type.'" parafremdsorte="'.$sorte.'" paraparent="'.$parentid.'"></div></div>';
 		}else{
-		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="100" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'"></textarea>';	
+		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="30" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'"></textarea>';	
 		$return .= '<div class="hidden" paraarbeit="new" parasuche="html" paranick="ckeditorInhalt" paraid="'.$id.'" parafremdid="'.$fremdid.'" paratype="'.$type.'" parafremdsorte="'.$sorte.'" paraparent="'.$parentid.'"></div></div>';
 		}
 	}
@@ -125,10 +125,10 @@ class GenerateForm{
 		}
 	}elseif($typFirst==4){
 		if($this->hatEinWert($this->id, $this->fremdid, $this->parentid)){
-		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="100" cols="80">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea>';
+		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="30" cols="80">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea>';
 		$return .= '<div class="hidden" paraarbeit="update" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div></div>';
 		}else{
-		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="100" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'"></textarea>';
+		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="30" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'"></textarea>';
 		$return .= '<div class="hidden" paraarbeit="new" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div></div>';
 		}
 
