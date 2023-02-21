@@ -16,7 +16,9 @@ a:hover {
   text-decoration: none;
 }
 
-
+.headerColumn:nth-child(even){
+  text-align: center!important;
+}
 
 .btn-apply {
   background: #007f6c;
