@@ -79,6 +79,7 @@ icerik yönetim sistemi - content management system
 
 ```
 #007f6c = new hex color code
+#3b8af2 = new hex color code for darker color
 ```
 
 2. find and replace geo location coordinates of map.js:
