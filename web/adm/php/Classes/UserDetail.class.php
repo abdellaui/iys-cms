@@ -4,7 +4,7 @@ class UserDetail{
 	public function __construct($id){
 		$this->id = $id;
 		$this->Connection = new Connection();
-		$this->qry = $this->Connection->query("SELECT * FROM admin WHERE id = :userID LIMIT 1;", array("userID"=>$this->id));
+		$this->qry = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."admin WHERE id = :userID LIMIT 1;", array("userID"=>$this->id));
 	}
 	public function getDetails() {
         return $this->qry[0];
@@ -12,7 +12,7 @@ class UserDetail{
 	public function passwordAendern($alte,$neue){
 		if(md5($alte)==$this->qry[0]['psw']){
 			if(strlen($neue)>2){
-				$this->Connection->query("UPDATE admin SET psw = :neuePSW WHERE id = :userID LIMIT 1;", array("userID"=>$this->id,"neuePSW"=>md5($neue)));
+				$this->Connection->query("UPDATE ".Connection::PREFIX."admin SET psw = :neuePSW WHERE id = :userID LIMIT 1;", array("userID"=>$this->id,"neuePSW"=>md5($neue)));
 				return 1;
 			}else{
 				return "Neues Passwort muss mindestens 3 Zeichen beinhalten!";
@@ -24,7 +24,7 @@ class UserDetail{
 	
 	public function mailAendern($neue){
 			if(strlen($neue)>5){
-				$this->Connection->query("UPDATE admin SET mail = :neueMAIL WHERE id = :userID LIMIT 1;", array("userID"=>$this->id,"neueMAIL"=>$neue));
+				$this->Connection->query("UPDATE ".Connection::PREFIX."admin SET mail = :neueMAIL WHERE id = :userID LIMIT 1;", array("userID"=>$this->id,"neueMAIL"=>$neue));
 				return 1;
 			}else{
 				return "Neue E-Mail muss mindestens 5 Zeichen beinhalten!";
@@ -32,7 +32,7 @@ class UserDetail{
 	}
 	
 	public function modusAendern($neue){
-				return ($this->Connection->query("UPDATE admin SET admin_mode = :neueModus WHERE id = :userID LIMIT 1;", array("userID"=>$this->id,"neueModus"=>$neue)));
+				return ($this->Connection->query("UPDATE ".Connection::PREFIX."admin SET admin_mode = :neueModus WHERE id = :userID LIMIT 1;", array("userID"=>$this->id,"neueModus"=>$neue)));
 	}
 }
 ?>

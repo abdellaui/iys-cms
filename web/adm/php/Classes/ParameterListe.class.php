@@ -4,7 +4,7 @@ class ParameterListe{
 	public function __construct($typ){
 		$this->vars = '';
 		$Connection = new Connection();
-		$q = $Connection->query("SELECT id, name FROM boxes WHERE id IN(SELECT fremdid FROM parameter WHERE sorte = '1' AND type NOT LIKE '6\_%') ORDER BY name ASC");
+		$q = $Connection->query("SELECT id, name FROM ".Connection::PREFIX."boxes WHERE id IN(SELECT fremdid FROM ".Connection::PREFIX."parameter WHERE sorte = '1' AND type NOT LIKE '6\_%') ORDER BY name ASC");
 		if($q){
 			if($typ==1){
 			$this->parameterListMenu($q);

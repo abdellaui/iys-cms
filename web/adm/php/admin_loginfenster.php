@@ -11,7 +11,7 @@ if(isset($_POST['psw']) && $_GET['login']){
 	}else{
 	$passwordHash = md5($_POST['psw']);
 	$Connection = new Connection();
-	$qry = $Connection->query("SELECT * FROM admin WHERE psw = :passwordHash AND id = :adminId LIMIT 1;", array('passwordHash'=> $passwordHash, 'adminId'=>'1'));
+	$qry = $Connection->query("SELECT * FROM ".Connection::PREFIX."admin WHERE psw = :passwordHash AND id = :adminId LIMIT 1;", array('passwordHash'=> $passwordHash, 'adminId'=>'1'));
 	if($qry){
 		if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
 			$ip = $_SERVER['HTTP_CLIENT_IP'];
@@ -20,7 +20,7 @@ if(isset($_POST['psw']) && $_GET['login']){
 		} else {
 			$ip = $_SERVER['REMOTE_ADDR'];
 		}
-		$upd = $Connection->query("UPDATE admin SET ip = :userIP, last_login = NOW() WHERE id = :adminId;", array('userIP'=>$ip, 'adminId'=>$qry[0]['id']));
+		$upd = $Connection->query("UPDATE ".Connection::PREFIX."admin SET ip = :userIP, last_login = NOW() WHERE id = :adminId;", array('userIP'=>$ip, 'adminId'=>$qry[0]['id']));
 			$_SESSION['login'] = $qry[0]['id'];
 			die('1');
 			exit;
