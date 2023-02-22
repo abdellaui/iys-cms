@@ -779,9 +779,6 @@ $(document).on('change', '.content>input, .content>textarea', function( evts ) {
   $('.ckeditorGenerator').each(function(){
 	  $(this).fadeIn('fast');
 	var thisId = $(this).attr('abdullahValue');
-	if(isMobile.any()){
-	$('#ckeditorFrame'+thisId).html('<div class="alert alert-danger" role="alert">Dieser Bereich ist nur mit einem Computer bearbeitbar!</div>');
-	} else {
     var editorCKeditor = CKEDITOR.replace('ckeditor'+thisId,{skin:'office2013',allowedContent:true,contentsCss:[ '/css/boostrap.min.css', '/css/style.css', '/css/ckeditor.css' ],
 			filebrowserBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html',
 			filebrowserImageBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html?type=Images',
@@ -791,8 +788,7 @@ $(document).on('change', '.content>input, .content>textarea', function( evts ) {
 		hasChanged = 13;
    var textCKeditor = evt.editor.getData();
    $('#ckeditorInhalt'+thisId).val(textCKeditor);
-	});
-	}
+	});	
   });
 }
 function alertToast(typ, title, content){
@@ -949,9 +945,6 @@ $('input, textarea').on( 'change', function( evts ) {hasChanged = 15;});
   $('#modalAlles .ckeditorGenerator').each(function(){
 	  $(this).fadeIn('fast');
 	var thisId = $(this).attr('abdullahValue');
-	if(isMobile.any()){
-	$('#ckeditorFrame'+thisId).html('<div class="alert alert-danger" role="alert">Dieser Bereich ist nur mit einem Computer bearbeitbar!</div>');
-	} else {
     var editorCKeditor = CKEDITOR.replace('ckeditor'+thisId,{skin:'office2013',allowedContent:true,contentsCss:[ '/css/boostrap.min.css', '/css/style.css', '/css/ckeditor.css' ],
 			filebrowserBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html',
 			filebrowserImageBrowseUrl: '/adm/plugins/ckfinder/ckfinder.html?type=Images',
@@ -962,7 +955,6 @@ $('input, textarea').on( 'change', function( evts ) {hasChanged = 15;});
    var textCKeditor = evt.editor.getData();
    $('#ckeditorInhalt'+thisId).val(textCKeditor);
 	});
-	}
   });
   
 	
