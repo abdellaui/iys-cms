@@ -71,20 +71,20 @@ class ApiClass {
 			$return .= '"  title="';
 			$return .= $inserat->getName();
 			$return .= '">';
-			$return .= '<img class="shadowBorder img-responsive center-block" src="';
+			$return .= '<img class="shadowBorder img-fluid center-block" src="';
 			$return .= $inserat->imagesArray[0][0];
 			$return .= '" alt="';
 			$return .= $inserat->getName();
 			$return .= '"></a></div>';
-			$return .= '<div class="col-sm-8 col-md-9 noPadding"><div class="col-sm-4 col-sm-push-8 text-right"><h3><b>';
+			$return .= '<div class="col-sm-8 col-md-9 noPadding"><div class="row"><div class="col-sm-5 order-2 text-end"><h3><b>';
 			$return .= $inserat->getPrice();
 			$return .= '</b></h3><h5>'.$ausweisbar.'</h5>';
-			$return .= '<a class="btn btn-default" href="/fahrzeuge?fid=';
+			$return .= '<a class="btn btn-primary" href="/fahrzeuge?fid=';
 			$return .= $inserat->getUrl();
 			$return .= '"  title="';
 			$return .= $inserat->getName();
 			$return .= '">';
-			$return .= '<i class="glyphicon glyphicon-info-sign"></i> Info</a></div><div class="col-sm-8 col-sm-pull-4 noPadding"><p><b>';
+			$return .= '<i class="glyphicon glyphicon-info-sign"></i> Info</a></div><div class="col-sm-7 order-1 noPadding"><p><b>';
 			$return .= $inserat->getCategory();
 			$return .= '<br>';
 			$return .= $inserat->condition;
@@ -105,6 +105,7 @@ class ApiClass {
 			$return .= '</div>';
 			$return .= '<div class="col-xs-6 noPadding">Erstzulassung</div><div class="col-xs-6 noPadding text-bold">';
 			$return .= $inserat->firstRegistration;
+			$return .= '</div>';
 			$return .= '</div>';
 			$return .= '</div></div></div>';
 			$init = true;
@@ -133,18 +134,18 @@ class ApiClass {
 		}else{
 			$ausweisbar ='MwSt. ausweisbar';
 		}
-		$return .= '</ul></div><div class="col-sm-12"><hr class="iysCmsAutoHaendler"></div><div class="col-sm-12"><div class="row noPadding"><div class="col-sm-12 hidden-md hidden-lg"><h3><b>';
+		$return .= '</ul></div><div class="col-sm-12"><hr class="iysCmsAutoHaendler"></div><div class="col-sm-12"><div class="row noPadding"><div class="col-sm-12 d-md-none d-lg-none d-sm-block d-xs-block"><h3><b>';
 		$return .= $inserat->getPrice();
 		$return .= '</b></h3><h5>'.$ausweisbar.'</h5>';
 
-		$return .= '<a class="btn btn-default pull-right" href="';
+		$return .= '<a class="btn btn-primary pull-right" href="';
 		$return .= $inserat->url;
 		$return .= '" target="_blank" title="';
 		$return .= $inserat->getName();
 		$return .= '">';
 		$return .= '<i class="glyphicon-glyphicon-share-alt"></i> zum Inserat</a>';
 
-		$return .= '</div><div class="col-sm-12 hidden-md hidden-lg"><hr class="iysCmsAutoHaendler"></div><div class="col-sm-8"><h4><b>';
+		$return .= '</div><div class="col-sm-12 d-md-none d-lg-none d-sm-block d-xs-block"><hr class="iysCmsAutoHaendler"></div><div class="col-sm-8"><h4><b>';
 		$return .= $inserat->getCategory();
 		$return .= '<br>';
 		$return .= $inserat->condition;
@@ -189,11 +190,11 @@ class ApiClass {
 		$return .= ', ';
 		$return .= $inserat->interiorColor;
 		$return .= '</div></div>';
-		$return .='</div><div class="col-sm-4 hidden-sm hidden-xs text-right"><h3><b>';
+		$return .='</div><div class="col-sm-4 d-sm-none d-xs-none d-md-block d-lg-block text-end"><h3><b>';
 		$return .= $inserat->getPrice();
 		$return .= '</b></h3><h5>'.$ausweisbar.'</h5>';
 
-		$return .= '<a class="btn btn-default pull-right" href="';
+		$return .= '<a class="btn btn-primary pull-right" href="';
 		$return .= $inserat->url;
 		$return .= '" target="_blank" title="';
 		$return .= $inserat->getName();
@@ -215,7 +216,7 @@ class ApiClass {
 		$return .= '</div></div>';
 		$return .= '<div class="col-sm-12"><hr class="iysCmsAutoHaendler"></div><div class="col-sm-12"><div class="col-sm-12 noPadding"><h4><b>Kontaktaufnahme</b></h4></div><form method="post" class="form-horizontal" id="kontaktFormular" data-toggle="validator" role="form"><!-- Text input--><div class="form-group has-feedback"><label class="col-md-2 control-label">Ihr Name</label>  <div class="col-md-10"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span><input  name="vorname" placeholder="Vor- und Nachname" class="form-control" type="text" required><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div></div></div><!-- Text input--><div class="form-group has-feedback"><label class="col-md-2 control-label">E-Mail</label>  <div class="col-md-10 inputGroupContainer"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span><input name="email" placeholder="E-Mail Addresse" class="form-control"  type="text" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" required><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div></div></div><!-- Text input--><div class="form-group has-feedback"><label class="col-md-2 control-label" >Betreff</label> <div class="col-md-10"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-share-alt"></i></span><input name="betreff" placeholder="Betreff" class="form-control" value="(Fahrzeuganfrage) ';
 		$return .= $inserat->getName();
-		$return .= '" type="text" required><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div></div></div><div class="form-group has-feedback"><label class="col-md-2 control-label"></label><div class="col-md-10"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><textarea class="form-control" name="text" placeholder="" rows="10" required></textarea></div></div></div><!-- Button --><div class="form-group has-feedback"><label class="col-md-2 control-label"></label><div class="col-md-10"><button type="submit" class="btn btn-danger btn-block" >Senden <span class="glyphicon glyphicon-send"></span></button></div></div></form><div id="modalAlles" class="modal fade" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">Ladet...</h4></div><div class="modal-body"><p>Ladet...</p></div><div class="modal-footer"><button type="button" class="btn btn-danger"  data-dismiss="modal">Schließen</button></div></div></div></div></div></div>';
+		$return .= '" type="text" required><span class="glyphicon form-control-feedback" aria-hidden="true"></span></div></div></div><div class="form-group has-feedback"><label class="col-md-2 control-label"></label><div class="col-md-10"><div class="input-group"><span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span><textarea class="form-control" name="text" placeholder="" rows="10" required></textarea></div></div></div><!-- Button --><div class="form-group has-feedback"><label class="col-md-2 control-label"></label><div class="col-md-10"><button type="submit" class="btn btn-primary btn-block" >Senden <span class="glyphicon glyphicon-send"></span></button></div></div></form><div id="modalAlles" class="modal fade" role="dialog"><div class="modal-dialog modal-sm"><div class="modal-content"><div class="modal-header"><button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button><h4 class="modal-title">Ladet...</h4></div><div class="modal-body"><p>Ladet...</p></div><div class="modal-footer"><button type="button" class="btn btn-danger"  data-dismiss="modal">Schließen</button></div></div></div></div></div></div>';
 
 		if(isset($GLOBALS['mvcNameToIndex']['title'])){
 			$GLOBALS['replacer'][1][$GLOBALS['mvcNameToIndex']['title']]= 'Automobile iysCms | '.$inserat->getName();
