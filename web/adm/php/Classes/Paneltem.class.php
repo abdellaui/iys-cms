@@ -6,12 +6,12 @@ class PanelItem{
 		$this->Connection = new Connection();
 	}
 	public function gibForm($id){
-			$d = $this->Connection->query("SELECT * FROM parameterpanelitem WHERE id = :getId LIMIT 1;",array("getId"=>$id));
+			$d = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameterpanelitem WHERE id = :getId LIMIT 1;",array("getId"=>$id));
 			if($d){
-				$a = $this->Connection->query("SELECT * FROM parameter WHERE id = :getId LIMIT 1;",array("getId"=>$d[0]['panel_id']));
+				$a = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameter WHERE id = :getId LIMIT 1;",array("getId"=>$d[0]['panel_id']));
 				if($a){
 					$item = new GenerateForm();
-					$qry = $this->Connection->query("SELECT * FROM parameter WHERE fremdid = :boxID AND sorte = '2';", array("boxID"=>substr($a[0]['type'], 2)),PDO::FETCH_CLASS, 'ParameterTypeArray');
+					$qry = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameter WHERE fremdid = :boxID AND sorte = '2';", array("boxID"=>substr($a[0]['type'], 2)),PDO::FETCH_CLASS, 'ParameterTypeArray');
 					if($qry){
 					$return ='';
 					foreach($qry as $k => $c){
@@ -30,7 +30,7 @@ class PanelItem{
 	}
 	public function insertItem($panelid, $name){
 		if(isset($panelid)&&isset($name)){
-			$c = $this->Connection->query("INSERT INTO parameterpanelitem (panel_id, name) VALUES (:panelId, :itemName);", array("panelId"=>$panelid,"itemName"=>$name));
+			$c = $this->Connection->query("INSERT INTO ".Connection::PREFIX."parameterpanelitem (panel_id, name) VALUES (:panelId, :itemName);", array("panelId"=>$panelid,"itemName"=>$name));
 			if($c){ 
 			return $this->Connection->lastInsertId();
 			}else{
@@ -42,7 +42,7 @@ class PanelItem{
 	}
 	public function updateItem($id, $name){
 		if(isset($id)&&isset($name)){
-			$c = $this->Connection->query("UPDATE parameterpanelitem SET name = :itemName WHERE id = :itemId LIMIT 1;", 
+			$c = $this->Connection->query("UPDATE ".Connection::PREFIX."parameterpanelitem SET name = :itemName WHERE id = :itemId LIMIT 1;", 
 			array(  "itemId"=>$id,
 					"itemName"=>$name)
 			);
@@ -56,8 +56,8 @@ class PanelItem{
 		}
 	}
 	public function deleteItem($id){
-		$b = $this->Connection->query("DELETE FROM parameterinhalt WHERE id IN(SELECT id FROM ( SELECT t3.id AS id FROM parameterpanelitem AS t1, parameter AS t2, parameterinhalt AS t3 WHERE t1.id = :idToDel AND t1.panel_id =t2.id AND t1.id = t3.parentid AND t3.fremdid = SUBSTRING(t2.type,3)) AS cid);",array("idToDel"=>$id));
-		$c = $this->Connection->query("DELETE FROM parameterpanelitem WHERE id = :idToDel LIMIT 1;", array("idToDel"=>$id));
+		$b = $this->Connection->query("DELETE FROM ".Connection::PREFIX."parameterinhalt WHERE id IN(SELECT id FROM ( SELECT t3.id AS id FROM ".Connection::PREFIX."parameterpanelitem AS t1, ".Connection::PREFIX."parameter AS t2, ".Connection::PREFIX."parameterinhalt AS t3 WHERE t1.id = :idToDel AND t1.panel_id =t2.id AND t1.id = t3.parentid AND t3.fremdid = SUBSTRING(t2.type,3)) AS cid);",array("idToDel"=>$id));
+		$c = $this->Connection->query("DELETE FROM ".Connection::PREFIX."parameterpanelitem WHERE id = :idToDel LIMIT 1;", array("idToDel"=>$id));
 		if($c){ 
 		return 1;
 		}else{

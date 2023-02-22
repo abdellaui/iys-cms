@@ -8,15 +8,15 @@ class GeneratePage{
 		$Suche = array();
 		$Finde = array();
 			if($getSorte==1){
-				$panelOderBox = $this->Connection->query("SELECT * FROM boxes WHERE id = :getId;", array("getId"=>$getId));
+				$panelOderBox = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."boxes WHERE id = :getId;", array("getId"=>$getId));
 			}else{
-				$panelOderBox = $this->Connection->query("SELECT * FROM panels WHERE id = :getId;", array("getId"=>$getId));
+				$panelOderBox = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."panels WHERE id = :getId;", array("getId"=>$getId));
 			}
 		if(count($panelOderBox)>0){
 		$dbGetId = $panelOderBox[0]['id'];
 		$dbGetName = $panelOderBox[0]['name'];
 		$dbGetSource = $panelOderBox[0]['source'];
-		$qry = $this->Connection->query("SELECT * FROM parameter WHERE fremdid = :dbGetId AND sorte = :sorteGet ORDER BY id ASC;", array("dbGetId"=>$dbGetId,"sorteGet"=>$getSorte));
+		$qry = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameter WHERE fremdid = :dbGetId AND sorte = :sorteGet ORDER BY id ASC;", array("dbGetId"=>$dbGetId,"sorteGet"=>$getSorte));
 		foreach($qry as $k => $a){
 			//START
 			if($getSorte==1){
@@ -31,7 +31,7 @@ class GeneratePage{
 					$_dbGetId=$getId;
 			}
 				if($typFirstLetter==1 || $typFirstLetter==2 || $typFirstLetter==3 || $typFirstLetter==4){
-					$getInhalt = $this->Connection->query("SELECT * FROM parameterinhalt WHERE paraid = :paraId AND parentid = :parentId AND type= :paraTyp AND sorte = :sorteGet AND fremdid = :dbGetId;",array(
+					$getInhalt = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameterinhalt WHERE paraid = :paraId AND parentid = :parentId AND type= :paraTyp AND sorte = :sorteGet AND fremdid = :dbGetId;",array(
 					"paraId"=>$a['id'],
 					"parentId"=>$parentId,
 					"paraTyp"=>$a['type'],
@@ -56,7 +56,7 @@ class GeneratePage{
 							$Finde[] = $nameToSe;
 						}
 				}elseif($typFirstLetter==5){
-					$item = $this->Connection->query("SELECT * FROM parameterpanelitem WHERE panel_id  = :panelID;",array("panelID"=>$a['id']));
+					$item = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameterpanelitem WHERE panel_id  = :panelID;",array("panelID"=>$a['id']));
 						if($item){
 							$typSecondLetter = substr($a['type'],2);
 								$test='';
@@ -114,7 +114,7 @@ class GeneratePage{
 										}
 				}elseif($typFirstLetter==6){
 					$Suche[] = '{{$_GET::'.$value['name'].'}}';
-					$panelOderBox = $this->Connection->query("SELECT * FROM boxes WHERE name = :getName;", array("getName"=>$value['wert']));
+					$panelOderBox = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."boxes WHERE name = :getName;", array("getName"=>$value['wert']));
 					if(count($panelOderBox)>0){
 						$Finde[] = $this->ersetzeParameterMitInhalt($panelOderBox[0]['id'],1);
 					}else{
@@ -128,18 +128,20 @@ class GeneratePage{
 		}
 
 
+		public function adapter_getPanel($getId, $getSorte, $itemId=0){
+			return $this->ersetzeParameterMitInhalt($getId, $getSorte, $itemId);
+		}
 
 		public function gebeSeite($getter, $head, $body){
 			$GLOBALS['replacer'] = $this->gibGetParameter($getter);
 
-			$var = '<html lang="de"><head>';
+			$var = '';
 			$var .= htmlspecialchars_decode($this->ersetzeParameterMitInhalt($head, 1),ENT_HTML5);
-			$var .='</head><body>';
 			ob_start();
 			eval('?>'.htmlspecialchars_decode($this->ersetzeParameterMitInhalt($body, 1),ENT_HTML5));
 			$var .= ob_get_contents();
 			ob_end_clean();
-			$var .= '</body></html>';
+			$var .= '';
 			$returnInhalt = str_replace($GLOBALS['replacer'][0], $GLOBALS['replacer'][1], $var);
 
 			return preg_replace('/\t|\n|\r|   |\x0B|\0/','',$returnInhalt);

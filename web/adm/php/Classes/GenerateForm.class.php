@@ -24,9 +24,9 @@ class GenerateForm{
 	}
 	private function hatEinWert($id, $fremdid, $parentid){
 		if($this->datebase==0){
-			$qry1 = $this->Connection->query("SELECT COUNT(id) AS anzahl, type, wert, id FROM parameterinhalt WHERE paraid = :paraID AND fremdid = :fremdID AND parentid = :parentID;", array("paraID"=>$id, "fremdID"=>$fremdid, "parentID"=>$parentid));
+			$qry1 = $this->Connection->query("SELECT COUNT(id) AS anzahl, type, wert, id FROM ".Connection::PREFIX."parameterinhalt WHERE paraid = :paraID AND fremdid = :fremdID AND parentid = :parentID;", array("paraID"=>$id, "fremdID"=>$fremdid, "parentID"=>$parentid));
 		}else{
-			$qry1 = $this->Connection->query("SELECT COUNT(i.id) AS anzahl, p.type AS type, i.wert AS wert, i.id AS id FROM mvc_parameterinhalt AS i, mvc_parameter AS p WHERE i.parentid = p.id AND i.pageid = :fremdID AND i.parentid = :parentID;", array("fremdID"=>$parentid, "parentID"=>$id));
+			$qry1 = $this->Connection->query("SELECT COUNT(i.id) AS anzahl, p.type AS type, i.wert AS wert, i.id AS id FROM ".Connection::PREFIX."mvc_parameterinhalt AS i, ".Connection::PREFIX."mvc_parameter AS p WHERE i.parentid = p.id AND i.pageid = :fremdID AND i.parentid = :parentID;", array("fremdID"=>$parentid, "parentID"=>$id));
 		}
 		if($qry1[0]['anzahl']>0){
 			if($qry1[0]['wert']!=''){
@@ -82,10 +82,10 @@ class GenerateForm{
 		}
 	}elseif($typFirst==4){
 		if($this->hatEinWert($id, $fremdid, $parentid)){
-		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="30" cols="80">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea>';
+		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="10" cols="80">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'">'.$this->hatEinWert($id, $fremdid, $parentid).'</textarea>';
 		$return .= '<div class="hidden" paraarbeit="update" parasuche="html" paranick="ckeditorInhalt" paraid="'.$id.'" parafremdid="'.$fremdid.'" paratype="'.$type.'" parafremdsorte="'.$sorte.'" paraparent="'.$parentid.'"></div></div>';
 		}else{
-		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="30" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'"></textarea>';	
+		$return .= '<div id="ckeditorFrame'.$genSuf.'" class="form-group"><label for="ckeditor'.$genSuf.'">Inhalt für '.$name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSuf.'" name="ckeditor'.$genSuf.'" id="ckeditor'.$genSuf.'" rows="10" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSuf.'"></textarea>';	
 		$return .= '<div class="hidden" paraarbeit="new" parasuche="html" paranick="ckeditorInhalt" paraid="'.$id.'" parafremdid="'.$fremdid.'" paratype="'.$type.'" parafremdsorte="'.$sorte.'" paraparent="'.$parentid.'"></div></div>';
 		}
 	}
@@ -125,16 +125,16 @@ class GenerateForm{
 		}
 	}elseif($typFirst==4){
 		if($this->hatEinWert($this->id, $this->fremdid, $this->parentid)){
-		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="30" cols="80">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea>';
+		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="10" cols="80">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'">'.$this->hatEinWert($this->id, $this->fremdid, $this->parentid).'</textarea>';
 		$return .= '<div class="hidden" paraarbeit="update" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div></div>';
 		}else{
-		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="30" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'"></textarea>';
+		$return .= '<div id="ckeditorFrame'.$genSufix.'" class="form-group"><label for="ckeditor'.$genSufix.'">Inhalt für '.$this->name.':</label><textarea class="ckeditorGenerator hidden" abdullahvalue="'.$genSufix.'" name="ckeditor'.$genSufix.'" id="ckeditor'.$genSufix.'" rows="10" cols="80"></textarea><textarea class="hidden" id="ckeditorInhalt'.$genSufix.'"></textarea>';
 		$return .= '<div class="hidden" paraarbeit="new" parasuche="html" paranick="ckeditorInhalt" paraid="'.$this->id.'" parafremdid="'.$this->fremdid.'" paratype="'.$this->type.'" parafremdsorte="'.$this->sorte.'" paraparent="'.$this->parentid.'"></div></div>';
 		}
 
 	}elseif($typFirst==5){
 		$typSecond = substr($this->type, 2);
-		$item = $this->Connection->query("SELECT * FROM parameterpanelitem WHERE panel_id = :getPanelID ORDER BY id ASC;", array("getPanelID"=>$this->id));
+		$item = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameterpanelitem WHERE panel_id = :getPanelID ORDER BY id ASC;", array("getPanelID"=>$this->id));
 		$return .='<ul class="list-group">';
 		if($item){
 		foreach($item as $k => $a){
@@ -145,7 +145,7 @@ class GenerateForm{
 		}
 		$return .= '</ul>';
 		
-		/*$qry = $this->Connection->query("SELECT * FROM parameter WHERE fremdid = :boxID AND sorte = '2';", array("boxID"=>$typSecond),PDO::FETCH_CLASS, 'ParameterTypeArray');
+		/*$qry = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameter WHERE fremdid = :boxID AND sorte = '2';", array("boxID"=>$typSecond),PDO::FETCH_CLASS, 'ParameterTypeArray');
 		if($qry){
 		foreach($qry as $k => $a){
 		$return .= $this->erstellFormMitParams($a->id, $a->name, $a->type, $a->fremdid ,$a->sorte, $a->typename, $this->id);	

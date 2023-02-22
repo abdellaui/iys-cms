@@ -8,9 +8,9 @@ class BoxListe{
 		$this->selectedId = $selectedId;
 		$Connection = new Connection();
 		if($this->id!=0){
-		$q = $Connection->query("SELECT id, name FROM boxes WHERE id != :boxID AND id NOT IN (SELECT fremdid FROM parameter WHERE type = :boxIDType) ORDER BY name ASC;", array("boxID"=>$this->id,"boxIDType"=>'6_'.$this->id));
+		$q = $Connection->query("SELECT id, name FROM ".Connection::PREFIX."boxes WHERE id != :boxID AND id NOT IN (SELECT fremdid FROM ".Connection::PREFIX."parameter WHERE type = :boxIDType) ORDER BY name ASC;", array("boxID"=>$this->id,"boxIDType"=>'6_'.$this->id));
 		}else{
-		$q = $Connection->query("SELECT id, name FROM boxes ORDER BY name ASC;");
+		$q = $Connection->query("SELECT id, name FROM ".Connection::PREFIX."boxes ORDER BY name ASC;");
 		}
 		if($q){
 		if($this->typ == 1){

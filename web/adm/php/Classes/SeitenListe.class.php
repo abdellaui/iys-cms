@@ -12,7 +12,7 @@ class SeitenListe{
         return $this->vars;
     }
 	private function seitenListeOutput(){
-		$c = $this->Connection->query("SELECT id, urls, names, headtag, bodytag FROM seiten ORDER BY id DESC;");
+		$c = $this->Connection->query("SELECT id, urls, names, headtag, bodytag FROM ".Connection::PREFIX."seiten ORDER BY id DESC;");
 		if($c){
 		$this->vars .='<ul class="list-group" id="seitenLister">';
 		foreach($c as $k => $a){
@@ -70,7 +70,7 @@ class SeitenListe{
 	}
 	public function insertPage($url, $name, $hbox, $bbox){
 		if(isset($url)&&isset($name)&&isset($hbox)&&isset($bbox)){
-			$c = $this->Connection->query("INSERT INTO seiten (urls, names, headtag, bodytag) VALUES (:seiteUrls, :seiteNames, :seiteHeadtag, :seiteBodytag);", array("seiteUrls"=>strtolower($url),"seiteNames"=>$name, "seiteHeadtag"=>$hbox, "seiteBodytag"=>$bbox));
+			$c = $this->Connection->query("INSERT INTO ".Connection::PREFIX."seiten (urls, names, headtag, bodytag) VALUES (:seiteUrls, :seiteNames, :seiteHeadtag, :seiteBodytag);", array("seiteUrls"=>strtolower($url),"seiteNames"=>$name, "seiteHeadtag"=>$hbox, "seiteBodytag"=>$bbox));
 			if($c){ 
 			return 1;
 			}else{
@@ -82,7 +82,7 @@ class SeitenListe{
 	}
 	public function updatePage($id, $url, $name, $hbox, $bbox){
 		if(isset($id)&&isset($url)&&isset($name)&&isset($hbox)&&isset($bbox)){
-			$c = $this->Connection->query("UPDATE seiten SET urls = :seiteUrls, names = :seiteNames, headtag = :seiteHeadtag, bodytag = :seiteBodytag WHERE id = :seiteId LIMIT 1;", 
+			$c = $this->Connection->query("UPDATE ".Connection::PREFIX."seiten SET urls = :seiteUrls, names = :seiteNames, headtag = :seiteHeadtag, bodytag = :seiteBodytag WHERE id = :seiteId LIMIT 1;", 
 			array(  "seiteUrls"=>strtolower($url),
 					"seiteNames"=>$name,
 					"seiteHeadtag"=>$hbox,
@@ -99,7 +99,7 @@ class SeitenListe{
 		}
 	}
 	public function deletePage($id){
-		$c = $this->Connection->query("DELETE FROM seiten WHERE id = :idToDel LIMIT 1;", array("idToDel"=>$id));
+		$c = $this->Connection->query("DELETE FROM ".Connection::PREFIX."seiten WHERE id = :idToDel LIMIT 1;", array("idToDel"=>$id));
 		if($c){ 
 		return 1;
 		}else{

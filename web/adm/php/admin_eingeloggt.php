@@ -14,7 +14,7 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>IYS-CMS Adminpanel</title>
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
-	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
@@ -27,7 +27,7 @@ if ( 'admin_eingeloggt.php' == basename($_SERVER['SCRIPT_FILENAME']) || !isset($
   <body class="hold-transition skin-black sidebar-mini">
     <div class="wrapper">
       <header class="main-header">
-        <a href="/" class="logo">
+        <a href="/adm/startseite" class="logo">
           <span class="logo-mini"><b>I</b>CMS</span>
           <span class="logo-lg"><b>IYS</b>-CMS</span>
         </a>

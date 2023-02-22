@@ -13,11 +13,11 @@ class ParameterTypeArray{
 		'6'=>'Box Platzhalter'
 		);
 		$Connection = new Connection();
-		$p = $Connection->query("SELECT id, name FROM panels ORDER BY name ASC;");
+		$p = $Connection->query("SELECT id, name FROM ".Connection::PREFIX."panels ORDER BY name ASC;");
 		foreach($p as $k => $a){
 			$array['5_'.$a['id'].'']= 'Panel: '.$a['name'];
 		}
-		$q = $Connection->query("SELECT id, name FROM boxes ORDER BY name ASC;");
+		$q = $Connection->query("SELECT id, name FROM ".Connection::PREFIX."boxes ORDER BY name ASC;");
 		foreach($q as $k => $a){
 			$array['6_'.$a['id'].'']= 'Box: '.$a['name'];
 		}

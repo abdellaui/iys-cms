@@ -5,7 +5,7 @@ class PanelListe{
 		$this->vars = '';
 		$this->typ = $typ;
 		$Connection = new Connection();
-		$q = $Connection->query("SELECT id, name FROM panels ORDER BY name ASC;");
+		$q = $Connection->query("SELECT id, name FROM ".Connection::PREFIX."panels ORDER BY name ASC;");
 		if($q){
 		if($this->typ == 1){
 			$this->panelListOption($q);

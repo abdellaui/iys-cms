@@ -12,7 +12,7 @@ public function setzeVariable($statusBox, $boxId, $name, $source, $parameters){
 	$this->parameters = $parameters;
 }
 public function findeVeriableVomDB($getboxId){
-	$qry = $this->Connection->query("SELECT id, name, source FROM boxes WHERE id = :boxID;", array("boxID"=>$getboxId));
+	$qry = $this->Connection->query("SELECT id, name, source FROM ".Connection::PREFIX."boxes WHERE id = :boxID;", array("boxID"=>$getboxId));
 	if ($qry) {
 	$this->statusBox = 'update';
 	$this->boxId = $qry[0]['id'];
@@ -33,13 +33,13 @@ public function createBox(){
 }
 
 private function addBoxes(){
-$qry = $this->Connection->query("INSERT INTO boxes (name, source) VALUES (:nameBox, :sourceBox);", array("nameBox"=>$this->name,"sourceBox"=>$this->source));
+$qry = $this->Connection->query("INSERT INTO ".Connection::PREFIX."boxes (name, source) VALUES (:nameBox, :sourceBox);", array("nameBox"=>$this->name,"sourceBox"=>$this->source));
 $this->boxId = $this->Connection->lastInsertId();
 $this->addParameters();
 }
 
 private function updateBoxes(){
-$qry = $this->Connection->query("UPDATE boxes SET name = :nameBox, source = :sourceBox WHERE id = :id;", array("nameBox"=>$this->name,"sourceBox"=>$this->source,"id"=>$this->boxId));
+$qry = $this->Connection->query("UPDATE ".Connection::PREFIX."boxes SET name = :nameBox, source = :sourceBox WHERE id = :id;", array("nameBox"=>$this->name,"sourceBox"=>$this->source,"id"=>$this->boxId));
 $this->updateParameters();
 }
 
@@ -47,7 +47,7 @@ private function addParameters(){
 	if(is_array($this->parameters) || is_object($this->parameters)){
 	foreach($this->parameters as $k => $a){
 		if($a[0]=="new"){
-		$qry = $this->Connection->query("INSERT INTO parameter (name, type, fremdid , sorte) VALUES (:namePara, :typePara, :boxId , '1');", array("namePara"=>$a[2],"typePara"=>$a[3],"boxId"=>$this->boxId));
+		$qry = $this->Connection->query("INSERT INTO ".Connection::PREFIX."parameter (name, type, fremdid , sorte) VALUES (:namePara, :typePara, :boxId , '1');", array("namePara"=>$a[2],"typePara"=>$a[3],"boxId"=>$this->boxId));
 		}
 	}
 	}
@@ -57,13 +57,13 @@ private function updateParameters(){
 	if(is_array($this->parameters) || is_object($this->parameters)){
 	foreach($this->parameters as $k => $a){
 		if($a[0]=="new"){
-		$qry = $this->Connection->query("INSERT INTO parameter (name, type, fremdid , sorte) VALUES (:namePara, :typePara, :boxId , '1');", array("namePara"=>$a[2],"typePara"=>$a[3],"boxId"=>$this->boxId));
+		$qry = $this->Connection->query("INSERT INTO ".Connection::PREFIX."parameter (name, type, fremdid , sorte) VALUES (:namePara, :typePara, :boxId , '1');", array("namePara"=>$a[2],"typePara"=>$a[3],"boxId"=>$this->boxId));
 		}elseif($a[0]=="update"){
-		$qry = $this->Connection->query("UPDATE parameter SET name = :namePara , type = :typePara WHERE id = :paraID;", array("namePara"=>$a[2],"typePara"=>$a[3],"paraID"=>$a[1]));
-		$qry1 = $this->Connection->query("DELETE FROM parameterinhalt WHERE paraid = :paraID AND sorte = '1';", array("paraID"=>$a[1]));
+		$qry = $this->Connection->query("UPDATE ".Connection::PREFIX."parameter SET name = :namePara , type = :typePara WHERE id = :paraID;", array("namePara"=>$a[2],"typePara"=>$a[3],"paraID"=>$a[1]));
+		$qry1 = $this->Connection->query("DELETE FROM ".Connection::PREFIX."parameterinhalt WHERE paraid = :paraID AND sorte = '1';", array("paraID"=>$a[1]));
 		}elseif($a[0]=="delete"){
-			$qry = $this->Connection->query("DELETE FROM parameter WHERE id = :paraID", array("paraID"=>$a[1]));
-			$qry = $this->Connection->query("DELETE FROM parameterinhalt WHERE paraid = :paraID AND sorte = 1", array("paraID"=>$a[1]));
+			$qry = $this->Connection->query("DELETE FROM ".Connection::PREFIX."parameter WHERE id = :paraID", array("paraID"=>$a[1]));
+			$qry = $this->Connection->query("DELETE FROM ".Connection::PREFIX."parameterinhalt WHERE paraid = :paraID AND sorte = 1", array("paraID"=>$a[1]));
 		}
 		
 	}
@@ -71,7 +71,7 @@ private function updateParameters(){
 }
 
 public function gebeBox(){
-	$qry1 = $this->Connection->query("SELECT * FROM parameter WHERE fremdid = :boxId AND sorte = '1';", array("boxId"=>$this->boxId),PDO::FETCH_CLASS, 'ParameterTypeArray');
+	$qry1 = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."parameter WHERE fremdid = :boxId AND sorte = '1';", array("boxId"=>$this->boxId),PDO::FETCH_CLASS, 'ParameterTypeArray');
 	$var =array();
 	$var['boxstatusbox'] = 'update';
 	$var['boxid'] = $this->boxId;
@@ -82,9 +82,9 @@ public function gebeBox(){
 	return $var;
 }
 public function deleteBox(){
-	$qry2 = $this->Connection->query("DELETE FROM parameterinhalt WHERE sorte = '1' AND paraid IN (SELECT id FROM parameter WHERE fremdid = :boxID AND sorte = '1');", array("boxID"=>$this->boxId));
-	$qry1 = $this->Connection->query("DELETE FROM parameter WHERE (fremdid  = :boxID AND sorte = '1') OR (type = :boxTypID AND sorte = '1');", array("boxID"=>$this->boxId, "boxTypID"=>'6_'.$this->boxId));
-	$qry0 = $this->Connection->query("DELETE FROM boxes WHERE id = :boxID;", array("boxID"=>$this->boxId));
+	$qry2 = $this->Connection->query("DELETE FROM ".Connection::PREFIX."parameterinhalt WHERE sorte = '1' AND paraid IN (SELECT id FROM ".Connection::PREFIX."parameter WHERE fremdid = :boxID AND sorte = '1');", array("boxID"=>$this->boxId));
+	$qry1 = $this->Connection->query("DELETE FROM ".Connection::PREFIX."parameter WHERE (fremdid  = :boxID AND sorte = '1') OR (type = :boxTypID AND sorte = '1');", array("boxID"=>$this->boxId, "boxTypID"=>'6_'.$this->boxId));
+	$qry0 = $this->Connection->query("DELETE FROM ".Connection::PREFIX."boxes WHERE id = :boxID;", array("boxID"=>$this->boxId));
 }
 
 public function gebeBoxDaten(){

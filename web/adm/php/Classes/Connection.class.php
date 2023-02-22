@@ -1,10 +1,7 @@
 <?php
-
-require(__DIR__ . "./../../../secrets.php");
-
-
 class Connection
-{
+{   
+    const PREFIX = 'rs_';
     private $pdo;
     private $sQuery;
     private $settings;
@@ -21,10 +18,10 @@ class Connection
     
     private function Connect()
     {
-        $this->settings["host"] = DB_HOST;
-		$this->settings["dbname"] = DB_NAME;
-		$this->settings["user"] =  DB_USERNAME;
-		$this->settings["password"] = DB_PASSWORD;
+        $this->settings["host"] = 'localhost';
+		$this->settings["dbname"] = 'db_306946_2';
+		$this->settings["user"] = 'USER306946';
+		$this->settings["password"] = 'limacityPasswords66';
 		
         $dsn            = 'mysql:dbname=' . $this->settings["dbname"] . ';host=' . $this->settings["host"] . '';
         try {

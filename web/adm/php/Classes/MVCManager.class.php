@@ -7,7 +7,7 @@ class MVCManager{
 	}
 	public function getList() {
 		$r = '';
-		$qry1 = $this->Connection->query("SELECT * FROM mvc_parameter ORDER BY id ASC;",[],PDO::FETCH_CLASS, 'ParameterTypeArray');
+		$qry1 = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."mvc_parameter ORDER BY id ASC;",[],PDO::FETCH_CLASS, 'ParameterTypeArray');
 	    $r .= '<div class="box box-success">
 		  		<div class="box-header with-border">
 				<h3 class="box-title">MVC Parameter</h3>
@@ -26,7 +26,7 @@ class MVCManager{
 		return $r;
 	}
 	public function gibDaten() {
-		$qry1 = $this->Connection->query("SELECT * FROM mvc_parameter ORDER BY id ASC;",[],PDO::FETCH_CLASS, 'ParameterTypeArray');
+		$qry1 = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."mvc_parameter ORDER BY id ASC;",[],PDO::FETCH_CLASS, 'ParameterTypeArray');
 		$return = ['success'=>'1', 'parameters'=>$qry1];
 
         return $return;
@@ -36,13 +36,13 @@ class MVCManager{
 		if(is_array($parameters) || is_object($parameters)){
 			foreach($parameters as $k => $a){
 				if($a[0]=="new"){
-				$qry = $this->Connection->query("INSERT INTO mvc_parameter (name, type) VALUES (:namePara, :typePara);", array("namePara"=>$a[2],"typePara"=>$a[3]));
+				$qry = $this->Connection->query("INSERT INTO ".Connection::PREFIX."mvc_parameter (name, type) VALUES (:namePara, :typePara);", array("namePara"=>$a[2],"typePara"=>$a[3]));
 				}elseif($a[0]=="update"){
-				$qry = $this->Connection->query("UPDATE mvc_parameter SET name = :namePara , type = :typePara WHERE id = :paraID;", array("namePara"=>$a[2],"typePara"=>$a[3],"paraID"=>$a[1]));
-				$qry1 = $this->Connection->query("DELETE FROM mvc_parameterinhalt WHERE parentid = :paraID;", array("paraID"=>$a[1]));
+				$qry = $this->Connection->query("UPDATE ".Connection::PREFIX."mvc_parameter SET name = :namePara , type = :typePara WHERE id = :paraID;", array("namePara"=>$a[2],"typePara"=>$a[3],"paraID"=>$a[1]));
+				$qry1 = $this->Connection->query("DELETE FROM ".Connection::PREFIX."mvc_parameterinhalt WHERE parentid = :paraID;", array("paraID"=>$a[1]));
 				}elseif($a[0]=="delete"){
-					$qry = $this->Connection->query("DELETE FROM mvc_parameter WHERE id = :paraID;", array("paraID"=>$a[1]));
-					$qry = $this->Connection->query("DELETE FROM mvc_parameterinhalt WHERE parentid = :paraID;", array("paraID"=>$a[1]));
+					$qry = $this->Connection->query("DELETE FROM ".Connection::PREFIX."mvc_parameter WHERE id = :paraID;", array("paraID"=>$a[1]));
+					$qry = $this->Connection->query("DELETE FROM ".Connection::PREFIX."mvc_parameterinhalt WHERE parentid = :paraID;", array("paraID"=>$a[1]));
 				}
 				
 			}
@@ -57,7 +57,7 @@ class MVCManager{
 					'6'=>'Box Platzhalter'
 					);
 			$return ='';
-			$qry = $this->Connection->query("SELECT * FROM mvc_parameter ORDER by id ASC;");
+			$qry = $this->Connection->query("SELECT * FROM ".Connection::PREFIX."mvc_parameter ORDER by id ASC;");
 			if($qry){
 				foreach($qry as $k => $c){
 							$par=1;
@@ -86,21 +86,21 @@ class MVCManager{
 		if(is_array($parameterInhalt) || is_object($parameterInhalt)){
 			foreach($parameterInhalt as $k => $a){
 				if($a[0]=="new"){
-				$qry1 = $this->Connection->query("SELECT COUNT(id) AS anzahl FROM mvc_parameterinhalt WHERE pageid = :paraID AND parentid = :parentID;", 
+				$qry1 = $this->Connection->query("SELECT COUNT(id) AS anzahl FROM ".Connection::PREFIX."mvc_parameterinhalt WHERE pageid = :paraID AND parentid = :parentID;", 
 				array(
 				"paraID"=>$a[5], 
 				"parentID"=>$a[1]
 				)
 				);
 				if($qry1[0]['anzahl']==0){
-				$qry = $this->Connection->query("INSERT INTO mvc_parameterinhalt (pageid, parentid, wert) VALUES (:paraID, :parentID, :wert);", 
+				$qry = $this->Connection->query("INSERT INTO ".Connection::PREFIX."mvc_parameterinhalt (pageid, parentid, wert) VALUES (:paraID, :parentID, :wert);", 
 				array("paraID"=>$a[5],
 					  "parentID"=>$a[1],
 					  "wert"=>$a[6]
 					  )
 				);
 				}else{
-				$qry = $this->Connection->query("UPDATE mvc_parameterinhalt SET wert = :wert WHERE pageid = :paraID AND parentid = :parentID;", 
+				$qry = $this->Connection->query("UPDATE ".Connection::PREFIX."mvc_parameterinhalt SET wert = :wert WHERE pageid = :paraID AND parentid = :parentID;", 
 				array("wert"=>$a[6],
 					  "paraID"=>$a[5],
 					  "parentID"=>$a[1]
@@ -108,7 +108,7 @@ class MVCManager{
 				);
 				}
 				}elseif($a[0]=="update"){
-				$qry = $this->Connection->query("UPDATE mvc_parameterinhalt SET wert = :wert WHERE pageid = :paraID AND parentid = :parentID;", 
+				$qry = $this->Connection->query("UPDATE ".Connection::PREFIX."mvc_parameterinhalt SET wert = :wert WHERE pageid = :paraID AND parentid = :parentID;", 
 				array("wert"=>$a[6],
 					  "paraID"=>$a[5],
 					  "parentID"=>$a[1]
