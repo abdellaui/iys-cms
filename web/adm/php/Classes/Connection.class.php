@@ -1,7 +1,7 @@
 <?php
 class Connection
 {   
-    const PREFIX = 'rs_';
+    const PREFIX = '';
     private $pdo;
     private $sQuery;
     private $settings;
