@@ -22,7 +22,7 @@ class Connection
     {
         $this->settings["host"] = DB_HOST;
 		$this->settings["dbname"] = DB_NAME;
-		$this->settings["user"] = DB_USERNAME_;
+		$this->settings["user"] = DB_USERNAME;
 		$this->settings["password"] = DB_PASSWORD;
 		
         $dsn            = 'mysql:dbname=' . $this->settings["dbname"] . ';host=' . $this->settings["host"] . '';
