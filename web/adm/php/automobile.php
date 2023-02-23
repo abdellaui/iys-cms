@@ -2,13 +2,14 @@
 session_start();
 error_log(0);
 date_default_timezone_set('Europe/Berlin'); 
+
+require(__DIR__ . "./../../secrets.php");
+
 ini_set("SMTP", SMTP_HOST);
 ini_set("smtp_port", SMTP_PORT);
 ini_set("sendmail_from", SMTP_USER);
 ini_set("auth_username", SMTP_USER);
 ini_set("auth_password", SMTP_PASSWORD);
-
-require(__DIR__ . "./../../secrets.php");
 
 if ((!isset($_SERVER['HTTP_X_REQUESTED_WITH']) && empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) != 'xmlhttprequest')) {
 	die('(c) '.date("Y").' by Abdullah Sahin. All rights reserved.');
