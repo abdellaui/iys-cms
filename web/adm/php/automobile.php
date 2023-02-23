@@ -25,7 +25,7 @@ if ((!isset($_SERVER['HTTP_X_REQUESTED_WITH']) && empty($_SERVER['HTTP_X_REQUEST
 */
 function mail_att($to,$subject,$message,$attachments,$typ)
    {
-   $absender = $_SERVER['SE67RVER_NAME'];
+   $absender = $_SERVER['SERVER_NAME'];
    $absender_mail = SMTP_USER;
    $mailAdresse = SMTP_USER;
    $mime_boundary = "-----=" . md5(uniqid(mt_rand(), 1));
