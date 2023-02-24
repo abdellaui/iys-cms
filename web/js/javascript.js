@@ -146,7 +146,7 @@ $("input[id=ankauf_bilder]").on('change',function(){
 			var reader = new FileReader();  
 			reader.onload = function(e) {
 				uniqueid= 'preview_iysCms_automobile_'+Math.floor((Math.random() * 100000) + 1)+'_'+file.lastModified;
-					$('#preview_Ankauf_Bilder>.row').append('<div class="col-sm-6 col-md-4" id="'+uniqueid+'"><div class="thumbnail"><div class="previewAnkaufHolder"><span class="btn btn-danger previewiysCmsDel" onclick="previewDel(\''+uniqueid+'\')"><i class="glyphicon glyphicon-trash"></i></span><img src="'+e.target.result+'" alt="'+name+'" class="img-responsive previewAnkauf"></div><div class="caption"><p>'+name+'</p><p></p></div><input type="hidden" name="bild['+uniqueid+'][base64]" class="hidden" value="'+e.target.result+'"><input name="bild['+uniqueid+'][name]" class="hidden" type="hidden" value="'+name1+'"><input name="bild['+uniqueid+'][type]" class="hidden" type="hidden" value="'+file.type+'"><input name="bild['+uniqueid+'][size]" class="hidden" type="hidden" value="'+file.size+'"></div>');
+					$('#preview_Ankauf_Bilder>.row').append('<div class="col-sm-6 col-md-4" id="'+uniqueid+'"><div class="thumbnail"><div class="previewAnkaufHolder"><span class="btn btn-danger previewiysCmsDel" onclick="previewDel(\''+uniqueid+'\')"><i class="bx bx-trash"></i></span><img src="'+e.target.result+'" alt="'+name+'" class="img-responsive previewAnkauf"></div><div class="caption"><p>'+name+'</p><p></p></div><input type="hidden" name="bild['+uniqueid+'][base64]" class="hidden" value="'+e.target.result+'"><input name="bild['+uniqueid+'][name]" class="hidden" type="hidden" value="'+name1+'"><input name="bild['+uniqueid+'][type]" class="hidden" type="hidden" value="'+file.type+'"><input name="bild['+uniqueid+'][size]" class="hidden" type="hidden" value="'+file.size+'"></div>');
 			}
 			reader.readAsDataURL(file);
 		}else{
@@ -168,10 +168,77 @@ $("input[id=ankauf_bilder]").on('change',function(){
   document.onscroll = scroll;
 });
 
-$(window).on("load", (function() {
+$(window).on("load", function() {
    if (window.applicationCache && window.applicationCache.status && window.applicationCache.status == window.applicationCache.UPDATEREADY) {
 	   console.log('CACHE MANIFEST UPDATED');
       window.applicationCache.swapCache();
       window.location.reload();
     }
+});
+
+function modalAlles(e, i) {
+  $(".modal-title").html(e), $(".modal-body").html(i), $("#modalAlles").modal("show")
+}
+
+function previewDel(e) {
+  $("#" + e).fadeOut("fast", function() {
+      $(this).remove()
+  }), $("#preview_Angebot_Bilder .row .col-sm-6").length <= 1 && $("#preview_Angebot_Bilder>.row").append('<div class="col-md-12" id="keineBilderResidence"><div class="paddingBottomBild">Sie kÃ¶nnen bis zur 6 Dateien anhÃ¤ngen!</div></div>')
+}
+$(document).ready(function() {
+   $("#kontaktFormular").validator().on("submit", function(e) {
+      return e.isDefaultPrevented() || (modalAlles("Sendevorgang", '<img src="/img/background/loadinganimation.gif" class="img-responsive center-block">'), $.ajax({
+          type: "POST",
+          url: "/interaktion/2",
+          data: $("#kontaktFormular").serialize(),
+          success: function(e) {
+              $(".modal-body").html(e)
+          },
+          error: function(e, i, n) {
+              modalAlles("Fehler!", '<div class="alert alert-danger">Es ist leider ein Fehler entstanden! ' + n + "</div>")
+          }
+      })), !1
+  }), $("#angebotFormular").validator().on("submit", function(e) {
+      return e.isDefaultPrevented() || (modalAlles("Sendevorgang", '<img src="/img/background/loadinganimation.gif" class="img-responsive center-block">'), $.ajax({
+          type: "POST",
+          url: "/interaktion/1",
+          data: $("#angebotFormular").serialize(),
+          success: function(e) {
+              $(".modal-body").html(e)
+          },
+          error: function(e, i, n) {
+              modalAlles("Fehler!", '<span class="alert alert-danger">Es ist leider ein Fehler entstanden! ' + n + "</span>")
+          }
+      })), !1
+  });
+  $("#bewerbungsFormular").validator().on("submit", function(e) {
+      return e.isDefaultPrevented() || (modalAlles("Sendevorgang", '<img src="/img/background/loadinganimation.gif" class="img-responsive center-block">'), $.ajax({
+          type: "POST",
+          url: "/interaktion/3",
+          data: $("#bewerbungsFormular").serialize(),
+          success: function(e) {
+              $(".modal-body").html(e)
+          },
+          error: function(e, i, n) {
+              modalAlles("Fehler!", '<span class="alert alert-danger">Es ist leider ein Fehler entstanden! ' + n + "</span>")
+          }
+      })), !1
+  });
+  $("input[id=angebot_bilder]").on("change", function() {
+      for (var e = "", i = 0; i < $(this).get(0).files.length; ++i) 0 == $("#preview_Angebot_Bilder .row .col-sm-6").length && $("#keineBilderResidence").remove(), parseInt($("#preview_Angebot_Bilder .row .col-sm-6").length + i) <= 5 ? ! function(i) {
+          var n = i.type.match("image.*"),
+              a = i.name;
+          if (a.length <= 15) var l = a;
+          else var l = a.substr(0, 25) + "[...]";
+          if (i.size < 5242880) {
+              var t = new FileReader;
+              t.onload = function(e) {
+                  var t = "preview_residence_service_" + Math.floor(1e5 * Math.random() + 1) + "_" + i.lastModified,
+                      s = '<div class="col-sm-6 col-md-4" id="' + t + '"><div class="thumbnail"><div class="previewAngebotHolder">';
+                  s = s + '<span class="btn btn-danger previewResidenceDel" onclick="previewDel(\'' + t + '\')"><i class="bx bx-trash"></i></span>', s = n ? s + '<img src="' + e.target.result + '" alt="' + l + '" class="img-responsive previewAngebot">' : s + '<img src="/img/file.png" alt="' + l + '" class="img-responsive previewAngebot">', s = s + '</div><div class="caption"><p>' + l + "</p><p></p></div>", s = s + '<textarea name="bild[' + t + '][base64]" class="hidden">' + e.target.result + "</textarea>", s = s + '<input name="bild[' + t + '][name]" class="hidden" type="hidden" value="' + a + '">', s = s + '<input name="bild[' + t + '][type]" class="hidden" type="hidden" value="' + i.type + '">', s = s + '<input name="bild[' + t + '][size]" class="hidden" type="hidden" value="' + i.size + '"></div>', $("#preview_Angebot_Bilder>.row").append(s)
+              }, t.readAsDataURL(i)
+          } else e = e + "<li>Datei <b>" + l + "</b> ist <b>grÃ¶ÃŸer als 5MB!</b></li>"
+      }($(this).get(0).files[i]) : e = e + "<li><b>Maximale Anhanganzahl (6) erreicht!</b> Datei:" + $(this).get(0).files[i].name + " konnte daher nicht hochgeladen werden!</li>";
+      "" != e && modalAlles("Fehler!", '<div class="alert alert-danger">Es ist/sind leider folgende/s Fehler entstanden! <ul>' + e + "</ul></div>")
+  })
 });
