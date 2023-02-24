@@ -165,56 +165,10 @@ $("input[id=ankauf_bilder]").on('change',function(){
 	 modalAlles('Fehler!','<div class="alert alert-danger">Es ist/sind leider folgende/s Fehler entstanden! <ul>'+r+'</ul></div>');
 	}
 });
- localpath = $(location).prop('pathname').split('/')[1].toLowerCase();
-	$('li#iysCmsMenuLink').each(function(){
-		if(($(this).attr('data-url')=='/'+localpath) ||(localpath=='' && $(this).attr('data-url')=='/startseite')){
-			$(this).addClass('active');
-		}
-	});
-	$('[data-toggle="tooltip"]').tooltip();
-	$('#scrollToMainC').on('click', function(e){e.preventDefault();$("html, body").animate({scrollTop:$("body").offset().top},800);return false;});
-	$(window).scrollTop(1);
-	$(window).scrollTop(0);
-var origOffsetY =$('#iysCmsMenu').offset().top+$('#iysCmsMenu').height();
-function scroll() {
-    if ($(window).scrollTop() >= origOffsetY) {
-		$('#iysCmsMenuFixed').fadeIn('fast');
-    } else {
-        $('#iysCmsMenuFixed').fadeOut('fast');
-    }
-
-
-   }
-$("#iysCmsAnimation:not(.animated)").bind('inview', function (event, visible) {
-  var dataanimation =  $(this).attr('data-animation');
-        if (visible == true) {
-
-					  $(this).addClass("animated "+dataanimation);
-        } else {
-            $(this).removeClass("animated "+dataanimation);
-        }
-});
   document.onscroll = scroll;
-    $('.iysCmsSkills > li > span:not(.animated)').bind('inview', function (event, visible) {
-        if (visible == true) {
-            $(this).each(function () {
-                $(this).animate({
-                    width: $(this).attr('data-width')
-                }, 3000);
-				$(this).addClass("animated");
-            });
-        }else{
-			   $(this).each(function () {
-                $(this).animate({
-                    width: '50%'
-                }, 1000);
-				$(this).removeClass("animated");
-            });
-		}
-    });
 });
 
-$(window).load(function() {
+$(window).on("load", (function() {
    if (window.applicationCache && window.applicationCache.status && window.applicationCache.status == window.applicationCache.UPDATEREADY) {
 	   console.log('CACHE MANIFEST UPDATED');
       window.applicationCache.swapCache();
