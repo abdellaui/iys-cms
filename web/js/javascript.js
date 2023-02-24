@@ -168,7 +168,7 @@ $("input[id=ankauf_bilder]").on('change',function(){
   document.onscroll = scroll;
 });
 
-$(window).on("load", (function() {
+$(window).on("load", function() {
    if (window.applicationCache && window.applicationCache.status && window.applicationCache.status == window.applicationCache.UPDATEREADY) {
 	   console.log('CACHE MANIFEST UPDATED');
       window.applicationCache.swapCache();
