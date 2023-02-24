@@ -28,33 +28,34 @@ function mail_att($to,$subject,$message,$attachments,$typ)
    $absender_mail = SMTP_USER;
    $mailAdresse = SMTP_USER;
    $mime_boundary = "-----=" . md5(uniqid(mt_rand(), 1));
-   $header = "From:".$absender."<".$absender_mail.">\r\n";
-   $header .= "To:".$to."\r\n";
-   $header .= "Reply-To:".$to."\r\n";
-   $header .= "Bcc:".$mailAdresse."\r\n";
-   $header .= "Subject: ".$subject."\r\n";
-   $header .= "Date: ".date("r")."\r\n";
-   $header .= "MIME-Version: 1.0\r\n";
-   $header .= "Content-Type: multipart/mixed;\r\n";
-   $header .= " boundary=\"".$mime_boundary."\"\r\n";
+   $header = "From:".$absender."<".$absender_mail.">\n";
+   $header .= "To:".$to."\n";
+   $header .= "Reply-To:".$to."\n";
+   $header .= "Bcc:".$mailAdresse."\n";
+   $header .= "Subject: ".$subject."\n";
+   $header .= "Date: ".date("r")."\n";
+   $header .= "Message-ID:<".time()." info@".$_SERVER['SERVER_NAME'].">\n";
+   $header .= "X-Mailer: PHP v".phpversion()."\n";
+   $header .= "MIME-Version: 1.0\n";
+   $header .= "Content-Type: multipart/mixed;\n";
+   $header .= " boundary=\"".$mime_boundary."\"\n";
    $content = "";
-   $content.= "--".$mime_boundary."\r\n";
-   $content.= "Content-Type: text/html; charset=\"UTF-8\"\r\n";
-   $content.= "Content-Transfer-Encoding: 8bit\r\n\r\n";
-   $content.= $message."\r\n";
+   $content.= "--".$mime_boundary."\n";
+   $content.= "Content-Type: text/html; charset=\"UTF-8\"\n";
+   $content.= "Content-Transfer-Encoding: 8bit\n\n";
+   $content.= $message."\n";
  
-   if(is_array($attachments) AND is_array(current($attachments)))
-      {
+   if(is_array($attachments) && is_array(current($attachments))){
       foreach($attachments AS $dat)
          {
          $data = chunk_split(str_replace('data:' . $dat['type'] . ';base64,','',$dat['base64']));
-         $content.= "--".$mime_boundary."\r\n";
-         $content.= "Content-Disposition: attachment;\r\n";
-         $content.= "\tfilename=\"".$dat['name']."\";\r\n";
-         $content.= "Content-Length: .".$dat['size'].";\r\n";
-         $content.= "Content-Type: ".$dat['type']."; name=\"".$dat['name']."\"\r\n";
-         $content.= "Content-Transfer-Encoding: base64\r\n\r\n";
-         $content.= $data."\r\n";
+         $content.= "--".$mime_boundary."\n";
+         $content.= "Content-Disposition: attachment;\n";
+         $content.= "\tfilename=\"".$dat['name']."\";\n";
+         $content.= "Content-Length: .".$dat['size'].";\n";
+         $content.= "Content-Type: ".$dat['type']."; name=\"".$dat['name']."\"\n";
+         $content.= "Content-Transfer-Encoding: base64\n\n";
+         $content.= $data."\n";
          }
       }
 	  $content .= "--".$mime_boundary."--"; 
@@ -68,12 +69,12 @@ function mail_att($to,$subject,$message,$attachments,$typ)
   if($sendezeit >= 60){
   if(@mail($to, $subject, $content, $header)){
 	$_SESSION['zuletz_angebot'] = time();
-    return '<div class="alert alert-success">Ihr Angebot wurde entgegengenommen! Sie erhalten in Kürze die Bestätigungsmail!</div>';
+    return '<div class="alert alert-success">Ihre Anfrage wurde entgegengenommen! Sie erhalten in Kürze die Bestätigungsmail!</div>';
    }else{
-	return '<div class="alert alert-danger">Es ist leider ein unerwartetes Fehler aufgetretten! Bitte prüfen Sie, ob Sie die Bestätigungsmail erhalten haben. Falls Sie Keines <b>innerhalb der nächsten 5 Minuten</b> erhalten, versuchen Sie erneuert einen Angebot zu stellen!</div>';
+	return '<div class="alert alert-danger">Es ist leider ein unerwartetes Fehler aufgetretten! Bitte prüfen Sie, ob Sie die Bestätigungsmail erhalten haben. Falls Sie Keines <b>innerhalb der nächsten 5 Minuten</b> erhalten, versuchen Sie erneuert eine Anfrage zu stellen!</div>';
    }
   }else{
-	return '<div class="alert alert-warning">Sie haben vor etwa <b>'.$sendezeit.' Sekunden</b> einen Angebot gestellt. Aus Sicherheitsgründen können Sie <b>pro Minuten</b> einen Angebot stellen! </div>';  
+	return '<div class="alert alert-warning">Sie haben vor etwa <b>'.$sendezeit.' Sekunden</b> eine Anfrage gestellt. Aus Sicherheitsgründen können Sie <b>pro Minuten</b> eine Anfrage stellen! </div>';  
   }
    }elseif($typ==2){
 		   if(isset($_SESSION['zuletz_mail'])){
@@ -92,27 +93,26 @@ function mail_att($to,$subject,$message,$attachments,$typ)
   }else{
 	return '<div class="alert alert-warning">Sie haben vor etwa <b>'.$sendezeit.' Sekunden</b> eine Kontaktanfrage gestellt. Aus Sicherheitsgründen können Sie <b>pro Minuten</b> eine Kontaktanfrage stellen! </div>';  
   }  
+   }elseif($typ==3){
+		   if(isset($_SESSION['zuletz_bewerbung'])){
+	  $lasttime = $_SESSION['zuletz_bewerbung'];
+  }else{
+	  $lasttime = 0;
+  }
+  $sendezeit = (time() - $lasttime);
+  if($sendezeit >= 60){
+  if(@mail($absender_mail, $subject, $content, $header)){
+	$_SESSION['zuletz_bewerbung'] = time();
+    return '<div class="alert alert-success">Ihre Bewerbung wurde entgegengenommen! Sie erhalten in Kürze die Bestätigungsmail!</div>';
+   }else{
+	return '<div class="alert alert-danger">Es ist leider ein unerwartetes Fehler aufgetretten! Bitte prüfen Sie, ob Sie die Bestätigungsmail erhalten haben. Falls Sie Keines <b>innerhalb der nächsten 5 Minuten</b> erhalten, bewerben Sie sich erneuert!</div>';
    }
+  }else{
+	return '<div class="alert alert-warning">Sie haben sich vor etwa <b>'.$sendezeit.' Sekunden</b>  beworben. Aus Sicherheitsgründen können Sie <b>pro Minuten</b> eine Bewerbung absenden! </div>';  
+  }  
    }
+  }
    
- function file_get_contents_curl($url) {
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_AUTOREFERER, TRUE);
-    curl_setopt($ch, CURLOPT_HEADER, FALSE);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-    curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);    
-	curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; WOW64; rv:48.0) Gecko/20100101 Firefox/48.0');
-    $data = curl_exec($ch);
-    curl_close($ch);
-    return $data;
-}
-
-
-
-
 function templateMail($subject, $body){
 	
 	$message ='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -132,7 +132,7 @@ function templateMail($subject, $body){
    -ms-text-size-adjust: 100% !important;
    -webkit-font-smoothing: antialiased !important;
    font-family:Helvetica, sans-serif;
-   background: #000000!important;
+   background: #00A4F0!important;
  }
  .tableContent img {
    border: 0 !important;
@@ -211,7 +211,7 @@ background: #ffffff;
 <script type="colorScheme" class="swatch active">
 {
     "name":"Default",
-    "bgBody":"000000",
+    "bgBody":"00A4F0",
     "link":"ffffff",
     "color":"ffffff",
     "bgItem":"ffffff",
@@ -220,7 +220,7 @@ background: #ffffff;
 </script>
 
 </head>
-<body paddingwidth="0" paddingheight="0" class=\'bgBody\'  style="padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; background-repeat: repeat; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; font-family:Helvetica, sans-serif;background: #000000!important;" offset="0" toppadding="0" leftpadding="0">
+<body paddingwidth="0" paddingheight="0" class=\'bgBody\'  style="padding-top: 0; padding-bottom: 0; padding-top: 0; padding-bottom: 0; background-repeat: repeat; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; -webkit-font-smoothing: antialiased; font-family:Helvetica, sans-serif;background: #00A4F0!important;" offset="0" toppadding="0" leftpadding="0">
   <table width="100%" border="0" cellspacing="0" cellpadding="0" class="tableContent bgBody" align="center"  style=\'font-family:Arial, sans-serif;\'>
     
     
@@ -238,12 +238,11 @@ background: #ffffff;
                       <tr>
                         <td width=\'10\'></td>
                         <td>
-                          <table width="480" border="0" cellspacing="0" cellpadding="0" align="center">
+                          <table width="307" border="0" cellspacing="0" cellpadding="0" align="center">
                             <tr>
                               <td align="middle">
                                 <div class="contentEditableContainer contentImageEditable">
                                   <div class="contentEditable">
-                                    <img src="https://sahin.cloud//img/icons/grossesIcon.png" width=\'480\' data-default="placeholder" data-max-width="480">
                                   <br>
 								  <br>
 								  </div>
@@ -274,9 +273,9 @@ background: #ffffff;
                               <td align="middle" >
                                 <div class="contentEditableContainer contentTextEditable">
                                   <div class="contentEditable">
-                    <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+								    <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
                                      '.$body.'
-                  </table>
+									</table>
                                   </div>
                                 </div>
                               </td>
@@ -309,28 +308,16 @@ background: #ffffff;
                               <td align="middle" >
                                 <div class="contentEditableContainer contentTextEditable">
                                   <div class="contentEditable">
-                    <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
-                  <tr><td><center>';
-                                     
-                  $arr = [
-                  ['Startseite', 'https://sahin.cloud/startseite'],
-                  ['Fahrzeuge', 'https://sahin.cloud/fahrzeuge'],
-                  ['Ankauf', 'https://sahin.cloud/ankauf'],
-                  ['Standort', 'https://sahin.cloud/standort'],
-                  ['Kontakt','https://sahin.cloud/kontakt']
-                  ]; 
-                  foreach($arr AS $k => $v){
-                    $message .= '
-                     <a href="'.$v[1].'" title="'.$v[0].'"> [ '.$v[0].' ] </a>
-                    ';
-                  }
-                   
-                  $message .= '</center>
-                  </td></tr>
-                  <tr><td>
-                  <hr>
-                  </td></tr>
-                  </table>
+								    <table width="95%" border="0" cellspacing="0" cellpadding="0" align="center">
+									<tr><td><center>';
+
+									 
+									$message .= '</center>
+									</td></tr>
+									<tr><td>
+									<hr>
+									</td></tr>
+									</table>
                                   </div>
                                 </div>
                               </td>
@@ -366,8 +353,13 @@ background: #ffffff;
 	return $message;
  }
 
-
-
+ function keineAngabe($in){
+ 	if($in){
+ 		return htmlspecialchars($in);
+ 	}else{
+ 		return '<i>keine Angabe</i>';
+ 	}
+ }
 /*
 #
 #    FUNCTIONS
@@ -378,223 +370,99 @@ background: #ffffff;
 
 if(isset($_GET['page'])){
 	
-if($_GET['page'] == 1 && isset($_GET['id']) && $_GET['id']){
-	header("Content-type: application/json; charset=utf-8");
-	echo file_get_contents_curl('https://auto-verkaufen.mobile.de/anbieten/syi/listCarModels.json?makeId='.$_GET['id'].'&lang=de');
-}elseif($_GET['page'] == 2 && $_POST['dsgvo']==1 && (isset($_POST['vorname']) && isset($_POST['telefonnummer']) && isset($_POST['email']) && isset($_POST['preisvorstellung']) && isset($_POST['marke']) && isset($_POST['modell']) && isset($_POST['erstzulassung_monat']) && isset($_POST['erstzulassung_jahr']) && isset($_POST['kategorie']) && isset($_POST['getriebe']) && isset($_POST['kraftstoffart']) && isset($_POST['beschaedigtes_fahrzeug']) && isset($_POST['unfallfahrzeug']) && isset($_POST['fahrtauglich']) && isset($_POST['kilometerstand']) && isset($_POST['leistung']) && isset($_POST['leistung_art']) && isset($_POST['hu_min_monat']) && isset($_POST['hu_min_jahr']) && isset($_POST['fahrzeughalter']) && isset($_POST['schadstoffklasse']) && isset($_POST['innenausstattung_typ']) && isset($_POST['farbe_innenausstattung']) && isset($_POST['fahrzeugbeschreibung']))){
-$markeArray = array('140'=>'Abarth','203'=>'AC','375'=>'Acura','800'=>'Aixam','900'=>'Alfa Romeo','1100'=>'ALPINA','121'=>'Artega','1750'=>'Asia Motors','1700'=>'Aston Martin','1900'=>'Audi','2000'=>'Austin','1950'=>'Austin Healey','3100'=>'Bentley','3500'=>'BMW','3850'=>'Borgward','4025'=>'Brilliance','4350'=>'Bugatti','4400'=>'Buick','4700'=>'Cadillac','112'=>'Casalini','5300'=>'Caterham','83'=>'Chatenet','5600'=>'Chevrolet','5700'=>'Chrysler','5900'=>'Citroën','6200'=>'Cobra','6325'=>'Corvette','6600'=>'Dacia','6800'=>'Daewoo','7000'=>'Daihatsu','7400'=>'DeTomaso','7700'=>'Dodge','255'=>'Donkervoort','235'=>'DS Automobiles','8600'=>'Ferrari','8800'=>'Fiat','172'=>'Fisker','9000'=>'Ford','205'=>'GAC Gonow','204'=>'Gemballa','9900'=>'GMC','122'=>'Grecav','186'=>'Hamann','10850'=>'Holden','11000'=>'Honda','11050'=>'Hummer','11600'=>'Hyundai','11650'=>'Infiniti','11900'=>'Isuzu','12100'=>'Iveco','12400'=>'Jaguar','12600'=>'Jeep','13200'=>'Kia','13450'=>'Koenigsegg','13900'=>'KTM','14400'=>'Lada','14600'=>'Lamborghini','14700'=>'Lancia','14800'=>'Land Rover','14845'=>'Landwind','15200'=>'Lexus','15400'=>'Ligier','15500'=>'Lincoln','15900'=>'Lotus','16200'=>'Mahindra','16600'=>'Maserati','16700'=>'Maybach','16800'=>'Mazda','137'=>'McLaren','17200'=>'Mercedes-Benz','17300'=>'MG','30011'=>'Microcar','17500'=>'MINI','17700'=>'Mitsubishi','17900'=>'Morgan','18700'=>'Nissan','18875'=>'NSU','18975'=>'Oldsmobile','19000'=>'Opel','149'=>'Pagani','19300'=>'Peugeot','19600'=>'Piaggio','19800'=>'Plymouth','20000'=>'Pontiac','20100'=>'Porsche','20200'=>'Proton','20700'=>'Renault','21600'=>'Rolls-Royce','21700'=>'Rover','125'=>'Ruf','21800'=>'Saab','22000'=>'Santana','22500'=>'Seat','22900'=>'Skoda','23000'=>'Smart','188'=>'speedART','100'=>'Spyker','23100'=>'Ssangyong','23500'=>'Subaru','23600'=>'Suzuki','23800'=>'Talbot','23825'=>'Tata','189'=>'TECHART','135'=>'Tesla','24100'=>'Toyota','24200'=>'Trabant','24400'=>'Triumph','24500'=>'TVR','25200'=>'Volkswagen','25100'=>'Volvo','25300'=>'Wartburg','113'=>'Westfield','25650'=>'Wiesmann','1400'=>'Andere');
-$subject = '[Angebot] '.htmlspecialchars($markeArray[$_POST['marke']]).' - '.htmlspecialchars($_POST['modell']).'';
-$message = '<tr><td><p>Vielen Dank <b>'.htmlspecialchars($_POST['vorname']).'</b>,</p><p>dass Sie uns als Händler Ihres Vertrauens anerkennen und Ihr Auto uns zum Ankauf vorstellen!</p><p>Sie erhalten hiermit die Bestätigung Ihres erfolgreich eingereichten Angebotes. Bitte haben Sie etwas Geduld, bis wir Ihnen mit einem Antwort entgegenkommen.</p><p>Ihr Angebot wird unverändert wie folgend an uns eingereicht:</p></td>
-						</tr>
-						<tr><td><h1>Angaben zur Person</h1></td>
-						</tr>
-						<tr><td>Name: <b>'.htmlspecialchars($_POST['vorname']).'</b></td>
-						</tr>
-						<tr><td>Telefonnummer: <b>'.htmlspecialchars($_POST['telefonnummer']).'</b></td>
-						</tr>
-						<tr><td>E-Mail: <b>'.htmlspecialchars($_POST['email']).'</b></td>
-						</tr>
-						<tr><td><h1>Bilder zur Auto</h1></td>
-						</tr>
-						<tr><td>';
-						if(isset($_POST['bild'])){
-							if(count($_POST['bild'])<=1){
-								$sinist= 'ist <b>'.count($_POST['bild']).' Bild</b>';
-							}else{
-								$sinist= 'sind <b>'.count($_POST['bild']).' Bilder</b>';
-							}
-							$message .= 'Es '.$sinist.' im Anhang';
-						}else{
-							$message .= '<i>Es wurden keine Bilder hinzugefügt!</i>';
-						}
-						$message .= '</b></td>
-						</tr>
-						<tr><td><h1>Angaben zum Auto</h1></td>
-						</tr>
-						<tr><td>Preisvorstelleung: <b>'.htmlspecialchars($_POST['preisvorstellung']).' €</b></td>
-						</tr>
-						<tr><td>Marke: <b>'.htmlspecialchars($markeArray[$_POST['marke']]).'</b></td>
-						</tr>
-						<tr><td>Modell: <b>'.htmlspecialchars($_POST['modell']).'</b></td>
-						</tr>
-						<tr><td>Erstzulassung: <b>'.htmlspecialchars($_POST['erstzulassung_monat']).' '.htmlspecialchars($_POST['erstzulassung_jahr']).'</b></td>
-						</tr>
-						<tr><td>Kategorie: <b>'.htmlspecialchars($_POST['kategorie']).'</b></td>
-						</tr>
-						<tr><td>Getriebe: <b>'.htmlspecialchars($_POST['getriebe']).'</b></td>
-						</tr>
-						<tr><td>Kraftstoffart: <b>'.htmlspecialchars($_POST['kraftstoffart']).'</b></td>
-						</tr>
-						<tr><td>Fahrzeugstand: <b>'.htmlspecialchars($_POST['beschaedigtes_fahrzeug']).'</b></td>
-						</tr>
-						<tr><td>Unfallfahrzeug: <b>'.htmlspecialchars($_POST['unfallfahrzeug']).'</b></td>
-						</tr>
-						<tr><td>Fahrtauglich: <b>'.htmlspecialchars($_POST['fahrtauglich']).'</b></td>
-						</tr>
-						<tr><td><h1>Weitere technische Daten</h1></td>
-						</tr>
-						<tr><td>Kilometerstand: <b>'.htmlspecialchars($_POST['kilometerstand']).' km</b></td>
-						</tr>
-						<tr><td>Leistung: <b>'.htmlspecialchars($_POST['leistung']).' '.htmlspecialchars($_POST['leistung_art']).'</b></td>
-						</tr>
-						<tr><td>HU (TÜV) mind. gültig bis: <b>'.htmlspecialchars($_POST['hu_min_monat']).' '.htmlspecialchars($_POST['hu_min_jahr']).'</b></td>
-						</tr>
-						<tr><td>Fahrzeughalter: <b>'.htmlspecialchars($_POST['fahrzeughalter']).'</b></td>
-						</tr>
-						<tr><td>Sitzplaetze: <b>'.htmlspecialchars($_POST['sitzplaetze']).'</b></td>
-						</tr>
-						<tr><td>Türe: <b>'.htmlspecialchars($_POST['tuere']).'</b></td>
-						</tr>
-						<tr><td>Hubraum: <b>'.htmlspecialchars($_POST['hubraum']).' cm³</b></td>
-						</tr>
-						<tr><td>Ø Kraftstoffverbrauch innerorts: <b>'.htmlspecialchars($_POST['kraftstoffverbr_inner']).' l/100k</b></td>
-						</tr>
-						<tr><td>Ø Kraftstoffverbrauch außerorts: <b>'.htmlspecialchars($_POST['kraftstoffverbr_ausser']).' l/100k</b></td>
-						</tr>
-						<tr><td>CO<sup>2</sup>-Emissionen komb.: <b>'.htmlspecialchars($_POST['co2-emissionen']).' g/km</b></td>
-						</tr>
-						<tr><td>Schadstoffklasse: <b>'.htmlspecialchars($_POST['schadstoffklasse']).'</b></td>
-						</tr>
-						<tr><td>Umweltplakette: <b>'.htmlspecialchars($_POST['umweltplakette']).'</b></td>
-						</tr>
-						<tr><td>Farbe: <b>';
-						foreach($_POST['farbe'] AS $a => $b){
-							$message .= $b.' ';
-						}
-						$message .= '</b></td>
-						</tr>
-						<tr><td>Innenausstattung: <b>'.htmlspecialchars($_POST['innenausstattung_typ']).'</b></td>
-						</tr>
-						<tr><td>Farbe der Innenausstattung: <b>'.htmlspecialchars($_POST['farbe_innenausstattung']).'</b></td>
-						</tr>
-						<tr><td><h1>Ausstattung</h1></td>
-						</tr>
-						<tr><td>Innenausstattung: 
-						<ul>';
-						if(isset($_POST['innenaustattung'])){
-						foreach($_POST['innenaustattung'] AS $a => $b){
-							$message .= '<li><b>'.htmlspecialchars($b).'</b></li>';
-						}
-						}else{
-							$message .= '<li><i>Keine Angaben</i></li>';
-						}
-						$message .='</ul>
-						</td>
-						</tr>
-						<tr><td>Außenausstattung: 
-						<ul>';
-						if(isset($_POST['aussenaustattung'])){
-						foreach($_POST['aussenaustattung'] AS $a => $b){
-							$message .= '<li><b>'.htmlspecialchars($b).'</b></li>';
-						}
-						}else{
-							$message .= '<li><i>Keine Angaben</i></li>';
-						}
-						$message .='</ul>
-						</td>
-						</tr>
-						<tr><td>Extras: 
-						<ul>';
-						if(isset($_POST['extrasaustattung'])){
-						foreach($_POST['extrasaustattung'] AS $a => $b){
-							$message .= '<li><b>'.htmlspecialchars($b).'</b></li>';
-						}
-						}else{
-							$message .= '<li><i>Keine Angaben</i></li>';
-						}
-						$message .='</ul>
-						</td>
-						</tr>
-						<tr><td>Sicherheit & Umwelt: 
-						<ul>';
-						if(isset($_POST['sicherheitundumweltaustattung'])){
-						foreach($_POST['sicherheitundumweltaustattung'] AS $a => $b){
-							$message .= '<li><b>'.htmlspecialchars($b).'</b></li>';
-						}
-						}else{
-							$message .= '<li><i>Keine Angaben</i></li>';
-						}
-						$message .='</ul>
-						</td>
-						</tr>
-						<tr><td><h1>Fahrzeugbeschreibung</h1></td>
-						</tr>
-						<tr>
-							<td>Ergänzende  Beschreibung:
-							  <fieldset>
-							    <legend></legend>
-									<b>'.nl2br(htmlspecialchars($_POST['fahrzeugbeschreibung'])).'</b>
-							  </fieldset><br>
-							</td>
-						</tr>';
+if($_GET['page'] == 1 && isset($_POST['stadt_angebot']) && isset($_POST['ihr_name']) && isset($_POST['email'])){
+
+$subject = '[Anfrage] '.htmlspecialchars($_POST['stadt_angebot']).'';
+$body = '<tr>
+			<td>
+				<p>Vielen Dank <b>'.htmlspecialchars($_POST['anrede']).' '.htmlspecialchars($_POST['ihr_name']).'</b>,</p>
+				<p>dass Sie uns als Dienstleister Ihres Vertrauens anerkennen und eine Anfrage stellen!</p>
+				<p>Sie erhalten hiermit die Bestätigung Ihrer erfolgreich eingereichte Anfrage. Bitte haben Sie etwas Geduld, bis wir Ihnen mit einem Antwort entgegenkommen.</p>
+				<p>Ihre Anfrage wird unverändert wie folgend an uns eingereicht:</p>
+			</td>
+		</tr>
+		<tr><td><hr></td></tr>
+		<tr>
+			<td><h2>Anforderungen</h2></td>
+		</tr>
+		<tr>
+			<td>Stadt: <b>'.htmlspecialchars($_POST['stadt_angebot']).'</b></td>
+		</tr>
+		<tr>
+			<td>Fläche in qm: <b>'.keineAngabe($_POST['qm_A']).'</b></td>
+		</tr>
+		<tr><td><hr></td></tr>
+		<tr>
+			<td><h2>Weitere Information</h2></td>
+		</tr>
+		<tr>
+			<td>Angaben:
+			  <fieldset>
+			    <legend></legend>
+					<b>'.nl2br(keineAngabe($_POST['weitere_info'])).'</b>
+			  </fieldset><br>
+			</td>
+		</tr>
+		<tr> 
+			<td>Anhänge: ';
+		if(isset($_POST['bild'])){
+			if(count($_POST['bild'])<=1){
+				$sinist= 'befindet sich <b>'.count($_POST['bild']).' Datei</b>';
+			}else{
+				$sinist= 'befinden sich <b>'.count($_POST['bild']).' Dateien</b>';
+			}
+			$body .= 'Es '.$sinist.' im Anhang';
+		}else{
+			$body .= '<i>Es wurden keine Dateien angehängt!</i>';
+		}
+		$body .= '</b></td>
+		</tr>
+		<tr><td><hr></td></tr>
+		<tr>
+			<td><h2>Kontaktdaten</h2></td>
+		</tr>
+		<tr>
+			<td>Ansprechperson: <b>'.htmlspecialchars($_POST['anrede']).' '.htmlspecialchars($_POST['ihr_name']).'</b></td>
+		</tr>
+		<tr>
+			<td>Strasse: <b>'.keineAngabe($_POST['strasse']).'</b></td>
+		</tr>
+		<tr>
+			<td>PLZ: <b>'.keineAngabe($_POST['plz']).'</b></td>
+		</tr>
+		<tr>
+			<td>Ort: <b>'.keineAngabe($_POST['ort']).'</b></td>
+		</tr>
+		<tr>
+			<td>Telefonnummer: <b>'.keineAngabe($_POST['tel']).'</b></td>
+		</tr>
+		<tr>
+			<td>E-Mail: <b>'.htmlspecialchars($_POST['email']).'</b></td>
+		</tr>
+		';
 if(isset($_POST['bild'])){
 $attachments = $_POST['bild'];
 }else{
 $attachments = '';
 }
-echo mail_att($_POST['email'], $subject,templateMail($subject, $message),$attachments,1);
+echo mail_att($_POST['email'],$subject,templateMail($subject,$body),$attachments,1);
 
-}elseif($_GET['page'] == 2){
-	if($_POST['dsgvo']!=1 || empty($_POST['dsgvo'])){
-		$error .= '<li>Akzeptieren Sie die Datenschutzerklärung.</li>'; 
-	}
-
+}elseif($_GET['page'] == 1){
 	$error ='<div class="alert alert-danger">Es ist/sind leider folgende/s Fehler entstanden! <ul>';
-	if(empty($_POST['vorname'])){
-	$error .= '<li>Inhalt für [vorname] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['telefonnummer'])){
-	$error .= '<li>Inhalt für [telefonnummer] wurde nicht gefunden!</li>'; }
+	if(empty($_POST['stadt_angebot'])){
+	$error .= '<li>Inhalt für [stadt] wurde nicht gefunden!</li>'; }
+	if(empty($_POST['ihr_name'])){
+	$error .= '<li>Inhalt für [ihr_name] wurde nicht gefunden!</li>'; }
 	if(empty($_POST['email'])){
 	$error .= '<li>Inhalt für [email] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['preisvorstellung'])){
-	$error .= '<li>Inhalt für [preisvorstellung] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['marke'])){
-	$error .= '<li>Inhalt für [marke] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['modell'])){
-	$error .= '<li>Inhalt für [modell] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['erstzulassung_monat'])){
-	$error .= '<li>Inhalt für [erstzulassung_monat] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['erstzulassung_jahr'])){
-	$error .= '<li>Inhalt für [erstzulassung_jahr] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['kategorie'])){
-	$error .= '<li>Inhalt für [kategorie] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['getriebe'])){
-	$error .= '<li>Inhalt für [getriebe] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['kraftstoffart'])){
-	$error .= '<li>Inhalt für [kraftstoffart] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['beschaedigtes_fahrzeug'])){
-	$error .= '<li>Inhalt für [beschaedigtes_fahrzeug] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['unfallfahrzeug'])){
-	$error .= '<li>Inhalt für [unfallfahrzeug] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['fahrtauglich'])){
-	$error .= '<li>Inhalt für [fahrtauglich] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['kilometerstand'])){
-	$error .= '<li>Inhalt für [kilometerstand] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['leistung'])){
-	$error .= '<li>Inhalt für [leistung] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['leistung_art'])){
-	$error .= '<li>Inhalt für [leistung_art] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['hu_min_monat'])){
-	$error .= '<li>Inhalt für [hu_min_monat] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['hu_min_jahr'])){
-	$error .= '<li>Inhalt für [hu_min_jahr] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['fahrzeughalter'])){
-	$error .= '<li>Inhalt für [fahrzeughalter] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['schadstoffklasse'])){
-	$error .= '<li>Inhalt für [schadstoffklasse] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['innenausstattung_typ'])){
-	$error .= '<li>Inhalt für [innenausstattung_typ] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['farbe_innenausstattung'])){
-	$error .= '<li>Inhalt für [farbe_innenausstattung] wurde nicht gefunden!</li>'; }
-	if(empty($_POST['fahrzeugbeschreibung'])){
-	$error .= '<li>Inhalt für [fahrzeugbeschreibung] wurde nicht gefunden!</li>'; }
 	$error .='</ul></div>';
 	echo $error;
-}elseif($_GET['page'] == 3 && isset($_POST['vorname']) && isset($_POST['email']) && isset($_POST['betreff']) && isset($_POST['text']) && $_POST['dsgvo']==1 ){
-$subject = '[Kontaktanfrage] '.htmlspecialchars($_POST['betreff']).'';
-$message = ' <tr><td><p>Liebe/r <b>'.htmlspecialchars($_POST['vorname']).'</b>,</p><p>Sie erhalten hiermit die Bestätigung Ihrer erfolgreich eingereichte Kontaktanfrage. Bitte haben Sie etwas Geduld, bis wir Ihnen mit einem Antwort entgegenkommen.</p></td>
+}elseif($_GET['page'] == 2 && isset($_POST['vorname']) && isset($_POST['email']) && isset($_POST['betreff']) && isset($_POST['text']) ){
+		$subject = '[Kontaktanfrage] '.htmlspecialchars($_POST['betreff']).'';
+		$body = '		<tr><td><p>Liebe/r <b>'.htmlspecialchars($_POST['vorname']).'</b>,</p><p>Sie erhalten hiermit die Bestätigung Ihrer erfolgreich eingereichte Kontaktanfrage. Bitte haben Sie etwas Geduld, bis wir Ihnen mit einem Antwort entgegenkommen.</p></td>
 						</tr>
-						<tr><td><h1>Kontaktanfrage</h1></td>
+						<tr><td><hr></td></tr>
+						<tr><td><h2>Kontaktanfrage</h2></td>
 						</tr>
 						<tr><td>Name: <b>'.htmlspecialchars($_POST['vorname']).'</b></td>
 						</tr>
@@ -603,20 +471,19 @@ $message = ' <tr><td><p>Liebe/r <b>'.htmlspecialchars($_POST['vorname']).'</b>,<
 						<tr><td>Betreff: <b>'.htmlspecialchars($_POST['betreff']).'</b></td>
 						</tr>
 						<tr>
-							<td>Inhalt:
+							<td>
+							  Inhalt:
 							  <fieldset>
 							    <legend></legend>
-									<b>'.nl2br(htmlspecialchars($_POST['text'])).'</b>
+									<b>'.nl2br(keineAngabe($_POST['text'])).'</b>
 							  </fieldset><br>
 							</td>
-						</tr>';
-	echo mail_att($_POST['email'], $subject,templateMail($subject, $message),'',2);
-}elseif($_GET['page'] == 3){
+						</tr>
+						';
+ 
+	echo mail_att($_POST['email'],$subject,templateMail($subject, $body),'',2);
+}elseif($_GET['page'] == 2){
 	$error ='<div class="alert alert-danger">Es ist/sind leider folgende/s Fehler entstanden! <ul>';
-	if($_POST['dsgvo']!=1 || empty($_POST['dsgvo'])){
-		$error .= '<li>Akzeptieren Sie die Datenschutzerklärung.</li>'; 
-	}
-
 	if(empty($_POST['vorname'])){
 	$error .= '<li>Inhalt für [vorname] wurde nicht gefunden!</li>'; }
 	if(empty($_POST['email'])){
@@ -625,6 +492,78 @@ $message = ' <tr><td><p>Liebe/r <b>'.htmlspecialchars($_POST['vorname']).'</b>,<
 	$error .= '<li>Inhalt für [betreff] wurde nicht gefunden!</li>'; }
 	if(empty($_POST['text'])){
 	$error .= '<li>Inhalt für [text] wurde nicht gefunden!</li>'; }
+	$error .='</ul></div>';
+	echo $error;
+}if($_GET['page'] == 3 && isset($_POST['bewerbung']) && isset($_POST['ihr_name']) && isset($_POST['email'])){
+
+$subject = '[Bewerbung] '.htmlspecialchars($_POST['anrede']).' '.htmlspecialchars($_POST['ihr_name']).'';
+$body = '<tr>
+			<td>
+				<p>Vielen Dank <b>'.htmlspecialchars($_POST['anrede']).' '.htmlspecialchars($_POST['ihr_name']).'</b>,</p>
+				<p>dass Sie sich bei uns beworben haben!</p>
+				<p>Sie erhalten hiermit die Bestätigung Ihrer erfolgreich eingereichten Bewerbung. Bitte haben Sie etwas Geduld, bis wir Ihnen mit einem Antwort entgegenkommen.</p>
+				<p>Ihre Bewerbung wird unverändert wie folgend an uns eingereicht:</p>
+			</td>
+		</tr>
+		<tr><td><hr></td></tr>
+		<tr>
+			<td><h2>Kontaktdaten</h2></td>
+		</tr>
+		<tr>
+			<td>Ansprechperson: <b>'.htmlspecialchars($_POST['anrede']).' '.htmlspecialchars($_POST['ihr_name']).'</b></td>
+		</tr>
+		<tr>
+			<td>Telefonnummer: <b>'.keineAngabe($_POST['tel']).'</b></td>
+		</tr>
+		<tr>
+			<td>E-Mail: <b>'.htmlspecialchars($_POST['email']).'</b></td>
+		</tr>
+		<tr><td><hr></td></tr>
+		<tr>
+			<td><h2>Bewerbungstext</h2></td>
+		</tr>
+		<tr>
+			<td>Angaben:
+			  <fieldset>
+			    <legend></legend>
+					<b>'.nl2br(keineAngabe($_POST['bewerbung'])).'</b>
+			  </fieldset><br>
+			</td>
+		</tr>
+		<tr><td><hr></td></tr>
+		<tr>
+			<td><h2>Anhänge</h2></td>
+		</tr>
+		<tr> 
+			<td>Information: ';
+		if(isset($_POST['bild'])){
+			if(count($_POST['bild'])<=1){
+				$sinist= 'befindet sich <b>'.count($_POST['bild']).' Datei</b>';
+			}else{
+				$sinist= 'befinden sich <b>'.count($_POST['bild']).' Dateien</b>';
+			}
+			$body .= 'Es '.$sinist.' im Anhang';
+		}else{
+			$body .= '<i>Es wurden keine Dateien angehängt!</i>';
+		}
+		$body .= '</b></td>
+		</tr>
+		';
+if(isset($_POST['bild'])){
+$attachments = $_POST['bild'];
+}else{
+$attachments = '';
+}
+echo mail_att($_POST['email'],$subject,templateMail($subject,$body),$attachments,1);
+
+}elseif($_GET['page'] == 3){
+	$error ='<div class="alert alert-danger">Es ist/sind leider folgende/s Fehler entstanden! <ul>';
+	if(empty($_POST['bewerbung'])){
+	$error .= '<li>Inhalt für [bewerbung] wurde nicht gefunden!</li>'; }	
+	if(empty($_POST['ihr_name'])){
+	$error .= '<li>Inhalt für [ihr_name] wurde nicht gefunden!</li>'; }
+	if(empty($_POST['email'])){
+	$error .= '<li>Inhalt für [email] wurde nicht gefunden!</li>'; }
 	$error .='</ul></div>';
 	echo $error;
 }
