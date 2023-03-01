@@ -1,0 +1,22 @@
+dateModified: 1677690278
+email:
+  fromEmail: admin@davinci-consulting.net
+  fromName: Data-Formular
+  transportType: craft\mail\transportadapters\Sendmail
+meta:
+  __names__:
+    2ccd0ea1-c0d2-46b4-8d08-4b319bf3a79b: Common # Common
+    968c10bd-75f1-4c96-b58e-d3a2635d5c34: Data-Formular # Data-Formular
+    fb5887fd-f63c-41d1-a731-0b991265f394: Data-Formular # Data-Formular
+system:
+  edition: solo
+  live: true
+  name: Data-Formular
+  schemaVersion: 3.7.33
+  timeZone: America/Los_Angeles
+users:
+  allowPublicRegistration: false
+  defaultGroup: null
+  photoSubpath: null
+  photoVolumeUid: null
+  requireEmailVerification: true

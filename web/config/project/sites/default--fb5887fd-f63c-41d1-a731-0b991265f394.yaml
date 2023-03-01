@@ -1,0 +1,8 @@
+baseUrl: $PRIMARY_SITE_URL
+handle: default
+hasUrls: true
+language: de
+name: Data-Formular
+primary: true
+siteGroup: 968c10bd-75f1-4c96-b58e-d3a2635d5c34 # Data-Formular
+sortOrder: 1
