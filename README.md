@@ -70,8 +70,9 @@ icerik yönetim sistemi - content management system
 ## live-demos
 
 - https://automobile-residence.de
+- https://backup-1.clan.rip/ (residence-service.de)
 - https://backup-2.clan.rip/ (carmix-duisburg.de)
-
+- https://backup-3.clan.rip/ (inseratfinder.de)
 
 ## installation:
 
