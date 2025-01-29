@@ -1,1 +1,3 @@
 *.css linguist-vendored
+*Dockerfile linguist-vendored
+*.sql linguist-vendored
