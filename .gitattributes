@@ -1,5 +1,5 @@
 *.css linguist-vendored
 *Dockerfile linguist-vendored
 *.sql linguist-vendored
-/web/adm/plugins/** linguist-vendored
-/web/js/** linguist-vendored
+web/adm/plugins/** linguist-vendored
+web/js/** linguist-vendored
