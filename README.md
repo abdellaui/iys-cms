@@ -5,6 +5,32 @@ a basic cms made by myself.
 
 icerik yönetim sistemi - content management system
 
+
+## some nice screenshots
+
+![screenshots/screen1.png](./screenshots/screen1.png)
+
+![screenshots/screen2.png](./screenshots/screen2.png)
+
+![screenshots/screen3.png](./screenshots/screen3.png)
+
+![screenshots/screen4.png](./screenshots/screen4.png)
+
+![screenshots/screen5.png](./screenshots/screen5.png)
+
+![screenshots/screen6.png](./screenshots/screen6.png)
+
+![screenshots/screen7.png](./screenshots/screen7.png)
+
+
+## live-demos
+
+- https://automobile-residence.de
+- https://backup-1.clan.rip/ (residence-service.de)
+- https://backup-2.clan.rip/ (carmix-duisburg.de)
+- https://backup-3.clan.rip/ (inseratfinder.de)
+
+
 ## test-user
 
 `Administrator` : `password`
@@ -50,35 +76,13 @@ icerik yönetim sistemi - content management system
 - [ ] admin backend supporting multi user with different permissions
 
 
-## some nice screenshots
-
-![screenshots/screen1.png](./screenshots/screen1.png)
-
-![screenshots/screen2.png](./screenshots/screen2.png)
-
-![screenshots/screen3.png](./screenshots/screen3.png)
-
-![screenshots/screen4.png](./screenshots/screen4.png)
-
-![screenshots/screen5.png](./screenshots/screen5.png)
-
-![screenshots/screen6.png](./screenshots/screen6.png)
-
-![screenshots/screen7.png](./screenshots/screen7.png)
-
-
-## live-demos
-
-- https://automobile-residence.de
-- https://backup-2.clan.rip/ (carmix-duisburg.de)
-
-
 ## installation:
 
 1. find and replace color of style.css:
 
 ```
 #007f6c = new hex color code
+#3b8af2 = new hex color code for darker color
 ```
 
 2. find and replace geo location coordinates of map.js:
